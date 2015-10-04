@@ -20,7 +20,6 @@
 </head>  
 <body onload='document.f.j_username.focus();'>  
  <h3>Login with Username and Password (Custom Login Page)</h3>  
-
  <c:if test="${not empty error}">
   <div class="errorblock">  
    Your login attempt was not successful, try again.  
