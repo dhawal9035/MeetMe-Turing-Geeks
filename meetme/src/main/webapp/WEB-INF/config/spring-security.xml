@@ -10,15 +10,15 @@
   
    <security:http auto-config="true" >  
   <security:intercept-url pattern="/success*" access="ROLE_USER" />  
-  <security:form-login login-page="/login" default-target-url="/index"  
-   authentication-failure-url="/login" />  
+  <security:form-login login-page="/login" default-target-url="/loginSuccess"  
+   authentication-failure-url="/loginfailed" />  
   <security:logout logout-success-url="/logout" />  
  </security:http>  
   
     <security:authentication-manager>  
    <security:authentication-provider>
      <security:jdbc-user-service data-source-ref="dataSource"    
-      users-by-username-query="select email_id, password from user_info where email_id=?"   
+      users-by-username-query="select email_id, password, 1 from user_info where email_id=?"   
           authorities-by-username-query="select us.email_id, ur.user_role from user_info us, user_roles ur   
         where us.user_id = ur.user_id and us.email_id =?"   
   />  

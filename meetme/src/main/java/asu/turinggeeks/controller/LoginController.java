@@ -13,20 +13,16 @@ public class LoginController {
 		return "login";
 	}
 	
-	/*@RequestMapping(value="/meetme/login", method=RequestMethod.GET)
-	public String login1(Model model){	
-	System.out.println("IN login controller");
-		return "login";
+	
+	
+	@RequestMapping(value="/loginSuccess", method=RequestMethod.GET)
+	public String register(Model model){		
+		return "success";
 	}
 	
-	@RequestMapping(value="meetme/login", method=RequestMethod.GET)
-	public String login2(Model model){	
-	System.out.println("IN login2 controller");
+	@RequestMapping(value="/loginfailed", method=RequestMethod.GET)
+	public String loginFailure(Model model){
+		model.addAttribute("error", "Invalid User Name or Password");
 		return "login";
-	}*/
-	
-	@RequestMapping(value="/register", method=RequestMethod.GET)
-	public String register(Model model){		
-		return "register";
 	}
 }
