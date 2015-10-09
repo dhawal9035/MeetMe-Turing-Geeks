@@ -8,18 +8,18 @@
 <title>Login Page</title>
 <style>  
 .errorblock {  
- color: #ff0000;  
- background-color: #ffEEEE;  
- border: 3px solid #ff0000;  
- padding: 8px;  
- margin: 16px;  
+ color: #ff0000;
+ background-color: #ffEEEE;
+ border: 3px solid #ff0000;
+ padding: 8px;
+ margin: 16px;
 }  
 </style> 
 </head>
 <body> 
 </head>  
 <body onload='document.f.j_username.focus();'>  
- <h3>Login with Username and Password (Custom Login Page)</h3>  
+ <h3>Login with Username and Password</h3>  
  <c:if test="${not empty error}">
   <div class="errorblock">  
    Your login attempt was not successful, try again.  
@@ -33,7 +33,7 @@
 
   <table>  
    <tr>  
-    <td>User:</td>  
+    <td>Email ID:</td>  
     <td><input type='text' name='j_username' value=''>  
     </td>  
    </tr>  

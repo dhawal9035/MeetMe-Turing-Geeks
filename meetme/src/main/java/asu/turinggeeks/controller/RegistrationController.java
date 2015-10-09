@@ -1,7 +1,5 @@
 package asu.turinggeeks.controller;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +27,14 @@ public class RegistrationController {
 	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public String processRegistration(@ModelAttribute("userForm") UserInfo userForm, Model model){
 		
-		registrationService.registerUser(userForm);
-		return "success";
+		boolean value = registrationService.registerUser(userForm);
+		if(value == true)
+			return "success";
+		else
+		{
+			System.out.println("Some error occured:");
+			return "registration";
+		}	
+			
 	}
 }

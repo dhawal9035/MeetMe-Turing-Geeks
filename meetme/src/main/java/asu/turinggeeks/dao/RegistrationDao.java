@@ -15,11 +15,18 @@ public class RegistrationDao {
 	DataSource dataSource;
 	
 	public boolean registerUser(UserInfo userForm){
-		String query="INSERT INTO user_info "+ "(first_name, last_name, email_id, password) VALUES (?,?,?,?)";
+		String query="INSERT INTO user_info "+ "(email_id, first_name, last_name, password) VALUES (?,?,?,?)";
 		JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
 		
-		jdbcTemplate.update(query, new Object[]{userForm.getFirstName(), userForm.getLastName(), userForm.getEmail(), userForm.getPassword()});
-				
-		return true;
+		int info = jdbcTemplate.update(query, new Object[]{userForm.getEmail(), userForm.getFirstName(), userForm.getLastName(), userForm.getPassword()});
+		
+		query = "INSERT INTO user_roles " + "(email_id, user_role) VALUES (?,?)";
+		
+		int roles  = jdbcTemplate.update(query, new Object[]{userForm.getEmail(), "ROLE_USER"});
+		
+		if(info == 1 && roles == 1)
+			return true;
+		else
+			return false;
 	}
 }
