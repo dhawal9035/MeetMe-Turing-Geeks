@@ -4,6 +4,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import asu.turinggeeks.model.UserInfo;
@@ -15,6 +16,9 @@ public class RegistrationDao {
 	DataSource dataSource;
 	
 	public boolean registerUser(UserInfo userForm){
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		userForm.setPassword(passwordEncoder.encode(userForm.getPassword()));
+		System.out.println();
 		String query="INSERT INTO user_info "+ "(email_id, first_name, last_name, password) VALUES (?,?,?,?)";
 		JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
 		
