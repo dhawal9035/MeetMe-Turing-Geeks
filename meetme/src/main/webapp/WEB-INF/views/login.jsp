@@ -37,11 +37,15 @@
 				<td><input type="password" name="j_password" /></td>
 			</tr>
 			<tr>
-				<td colspan="2"><input name="submit" type="submit"
-					value="Submit" /></td>
+				<td colspan="2">
+					<input name="submit" type="submit" value="Submit" />
+					<input name="reset" type="reset" />	
+				</td>
+				<td></td>
 			</tr>
 			<tr>
-				<td colspan="2"><input name="reset" type="reset" /></td>
+				<td> Not Registered yet? </td>
+				<td> <a href="/meetme/register">Register Here</a>
 			</tr>
 		</table>
 	</form>

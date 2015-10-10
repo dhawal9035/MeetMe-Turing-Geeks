@@ -29,7 +29,7 @@ public class RegistrationController {
 		
 		boolean value = registrationService.registerUser(userForm);
 		if(value == true)
-			return "success";
+			return "login";
 		else
 		{
 			System.out.println("Some error occured:");

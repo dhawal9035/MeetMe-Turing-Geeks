@@ -19,6 +19,8 @@
   		authentication-failure-url="/loginFailed" />  
   		<security:logout logout-success-url="/logout" />
   		<security:access-denied-handler error-page="/403"/> 
+  		<security:remember-me token-validity-seconds="1209600" remember-me-parameter="remember-me"
+  		data-source-ref="dataSource"/>
  	</security:http>  
   
     <security:authentication-manager>  
@@ -30,7 +32,8 @@
         	where us.email_id =?"   
   			/>  
    		</security:authentication-provider>
- 	</security:authentication-manager> 
+ 	</security:authentication-manager>
+ 	 
  	
  	<bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 </beans> 
