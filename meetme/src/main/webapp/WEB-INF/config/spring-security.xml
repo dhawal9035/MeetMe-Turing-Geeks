@@ -18,7 +18,8 @@
   		<security:form-login login-page="/login" default-target-url="/loginSuccess"
   		authentication-failure-url="/loginFailed" />  
   		<security:logout logout-success-url="/logout" />
-  		<security:access-denied-handler error-page="/403"/> 
+  		<security:access-denied-handler error-page="/403"/>
+  		<security:remember-me data-source-ref="dataSource"/> 
   		
  	</security:http>  
   

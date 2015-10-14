@@ -37,6 +37,10 @@
 				<td><input type="password" name="j_password" /></td>
 			</tr>
 			<tr>
+				<td><b>Remember Me:</b></td>
+				<td><input type="checkbox" name="_spring_security_remember_me" /></td>
+			</tr>
+			<tr>
 				<td colspan="2">
 					<input name="submit" type="submit" value="Submit" />
 					<input name="reset" type="reset" />	
