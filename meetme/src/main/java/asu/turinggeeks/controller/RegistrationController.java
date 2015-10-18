@@ -16,25 +16,27 @@ public class RegistrationController {
 	@Autowired
 	RegistrationService registrationService;
 	
-	@RequestMapping(value="/register", method=RequestMethod.GET)
+	/*@RequestMapping(value="/register", method=RequestMethod.GET)
 	public String viewRegistration(Model model){
 		UserInfo userForm = new UserInfo();
 		model.addAttribute("userForm", userForm);
 		
 		return "registration";
-	}
+	}*/
 	
 	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public String processRegistration(@ModelAttribute("userForm") UserInfo userForm, Model model){
 		
-		boolean value = registrationService.registerUser(userForm);
-		if(value == true)
+		registrationService.registerUser(userForm);
+		return "login";
+		/*if(value == true){
 			return "login";
+		}
 		else
 		{
 			System.out.println("Some error occured:");
-			return "registration";
-		}	
+			return "login";
+		}*/	
 			
 	}
 }
