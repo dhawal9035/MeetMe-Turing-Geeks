@@ -8,7 +8,8 @@
 </head>
 <body onload="document.f.email.focus()">
 	<h2>Forgot Password</h2>
-	<form name="f" action="../forgotPassword" method="POST">
+	<!-- action="../forgotPassword" --> 
+	<form name="f" method="post">
 		<table>
 			<tr>
 				<td>Email ID:</td>
