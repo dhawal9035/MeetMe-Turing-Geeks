@@ -14,6 +14,9 @@
 		<security:intercept-url pattern="/loginFailed" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<security:intercept-url pattern="/logout" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<security:intercept-url pattern="/register" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<security:intercept-url pattern="/forgotPassword" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<security:intercept-url pattern="/resetPassword" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<security:intercept-url pattern="/newPassword*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
   		<security:intercept-url pattern="/**" access="ROLE_USER" />  
   		<security:form-login login-page="/login" default-target-url="/loginSuccess"
   		authentication-failure-url="/loginFailed" />  

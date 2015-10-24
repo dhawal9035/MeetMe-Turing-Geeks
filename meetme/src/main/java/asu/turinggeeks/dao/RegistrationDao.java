@@ -18,7 +18,6 @@ public class RegistrationDao {
 	public boolean registerUser(UserInfo userForm){
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		userForm.setPassword(passwordEncoder.encode(userForm.getPassword()));
-		System.out.println();
 		String query="INSERT INTO user_info "+ "(email_id, first_name, last_name, password) VALUES (?,?,?,?)";
 		JdbcTemplate jdbcTemplate= new JdbcTemplate(dataSource);
 		
