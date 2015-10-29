@@ -31,7 +31,7 @@ public class LoginDao {
 			return true;
 	}
 
-	public boolean updatePassword(UserInfo userForm) {
+	public boolean updatePass(UserInfo userForm) {
 		jdbcTemplate = new JdbcTemplate(dataSoruce);
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		userForm.setPassword(passwordEncoder.encode(userForm.getPassword()));

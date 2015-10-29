@@ -8,19 +8,24 @@
 <title>Enter New Password:</title>
 </head>
 <body>
-<h2>Enter New Password {email}</h2>
-	<form:form role="form" method="post" action="newPassword" commandName="userForm">
+<h2>Enter New Password </h2>
+	<form:form role="form" method="POST" action="/meetme/updatePassword" commandName="userForm">
 		<table>
 			<tr>
+				<td>Please enter your email ID to confirm</td>
+				<td><form:input type="email" class="form-control" path="email" placeholder="Enter Email" /> </td>
+			</tr>
+			<tr>
 				<td>Password</td>
-				<td><input type="password" id="password"> </td>
+				<td><form:password class="form-control" path="password" placeholder="Choose password" /> </td>
 			</tr>
-			<tr>
+			<%-- <tr>
 				<td>Retype-Password</td>
-				<td><input type="password" id="password"> </td>
-			</tr>
+				<td><form:password class="form-control" path="password"
+									placeholder="Choose password" /> </td>
+			</tr> --%>
 			<tr>
-				<td colspan="2"><center><input type="Submit" value="Save"> </center> </td>
+				<td colspan="2"><center><input type="Submit" value="Submit"> </center> </td>
 			</tr>
 		</table>
 	</form:form>

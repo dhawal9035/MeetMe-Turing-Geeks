@@ -21,10 +21,10 @@ public class LoginController {
 	@Autowired
 	private MailService mailService;
 
-	/*@RequestMapping(value="/", method=RequestMethod.GET)
-	public String login1(Model model){		
+	@RequestMapping(value="/", method=RequestMethod.GET)
+	public String login1(Model model, @ModelAttribute("userForm") UserInfo userForm){		
 		return "login";
-	}*/
+	}
 	@RequestMapping(value="/login", method=RequestMethod.GET)
 	public String login(Model model){
 		UserInfo userForm = new UserInfo();
@@ -69,6 +69,7 @@ public class LoginController {
 		model.addAttribute("userForm", userForm);
 		boolean userCheck = loginService.checkUser(userForm);
 		if(userCheck){
+			System.out.println(userForm.getEmail());
 			System.out.println("User Found");
 			mailService.sendMail(userForm.getEmail());
 			model.addAttribute("checkMail", "Please check your email for password reset link");
@@ -81,13 +82,21 @@ public class LoginController {
 		}
 	}
 		
-	@RequestMapping(value="/newPassword/{email}")
-	public String resetPassword(@PathVariable String email, @ModelAttribute("userForm") UserInfo userForm, Model model){
+	@RequestMapping(value="/newPassword/{email}", method=RequestMethod.GET)
+	public String resetPassword(@PathVariable String email,@ModelAttribute("userForm") UserInfo userForm, Model model){
+		model.addAttribute("userForm", userForm);
+		model.addAttribute("email", userForm.getEmail());
+		return "/newPassword";
+	}
+	
+	@RequestMapping(value="/updatePassword", method=RequestMethod.POST)
+	public String updatePassword(@ModelAttribute("userForm") UserInfo userForm, Model model){
+		System.out.println(userForm.getEmail());
 		model.addAttribute("userForm", userForm);
 		model.addAttribute("email",userForm.getEmail());
 		boolean userCheck = loginService.checkUser(userForm);
 		if(userCheck){
-			loginService.updatePassword(userForm);
+			loginService.updatePass(userForm);
 			model.addAttribute("updated", "Your password has been updated. Please wait for a while before logging in");
 			return "login";
 		}
@@ -95,6 +104,5 @@ public class LoginController {
 			model.addAttribute("processError", "There was an error processing your request. Please try again.");
 			return "login";
 		}
-		
 	}
 }

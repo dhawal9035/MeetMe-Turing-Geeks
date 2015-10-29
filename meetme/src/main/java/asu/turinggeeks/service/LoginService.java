@@ -16,8 +16,8 @@ public class LoginService {
 		return loginDao.checkUser(userForm);
 	}
 	
-	public boolean updatePassword(UserInfo userForm){
-		return loginDao.updatePassword(userForm);
+	public boolean updatePass(UserInfo userForm){
+		return loginDao.updatePass(userForm);
 	}
 	
 }
