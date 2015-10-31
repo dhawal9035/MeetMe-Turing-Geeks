@@ -78,8 +78,7 @@ body {
 </c:if>
 <c:if test="${not empty userNotFound}">
 	<div class="errorblock">You are not registered with us. Please
-		click on Need Account to continue. Caused :
-		${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</div>
+		click on Need Account to continue.</div>
 </c:if>
 <c:if test="${not empty updated}">
 	<div class="successblock">Your password has been updated. Please
@@ -151,6 +150,15 @@ body {
 		</form>
 	</div>
 
+	<%-- <form action="/facebook" method="POST">
+		<div class="row row-centered">
+			<div class="col-lg-2 col-right">
+				<button type="button" class="btn btn-link btn-info btn-lg col-sm-2 ">
+					Login Using Facebook!
+				</button>	
+			</div>
+		</div>
+	</form> --%>
 	<div id="ForgotPasswordModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -159,13 +167,11 @@ body {
 					<h2 class="modal-title">Forgot your password? No worries!</h2>
 				</div>
 				<div class="modal-body text-align:center">
-					<form:form role="form" action="resetPassword" method="POST"
-						commandName="userForm">
+					<form:form role="form" action="resetPassword" method="POST" commandName="userForm">
 						<div class="row">
 							<div
 								class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
-								<form:input type="email" class="form-control" path="email"
-									placeholder="Enter Email" />
+								<form:input type="email" class="form-control" path="email" placeholder="Enter Email" />
 							</div>
 						</div>
 						<div class="modal-footer">

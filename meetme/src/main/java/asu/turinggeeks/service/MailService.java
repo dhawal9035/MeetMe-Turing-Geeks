@@ -24,9 +24,10 @@ public class MailService {
 		try{
 			mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 			mimeMessageHelper.setTo(email);
-			
+			mimeMessage.setSubject("Reset Password Link");
 			mimeMessageHelper.setFrom("meetmetg@gmail.com");
-			mimeMessageHelper.setText("<html><body>Hi,<br/><a href='http://localhost:8080/meetme/newPassword/{email}'> Click here</a> to reset password</body></html>",true);
+			mimeMessageHelper.setText("<html><body>Hi,<br/><br/> Please use the link given to reset your password. <a href='http://localhost:8080/meetme/newPassword/"+email+"'> Click here</a>. "
+					+ "<br/><br/>Thanks and Best Regards,<br/> MeetMe Team</body></html>",true);
 			mailSender.send(mimeMessage);
 		}
 		catch(Exception e){
