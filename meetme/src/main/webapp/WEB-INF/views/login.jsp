@@ -82,7 +82,7 @@ body {
 </c:if>
 <c:if test="${not empty updated}">
 	<div class="successblock">Your password has been updated. Please
-		wait for a while before logging in.</div>
+		wait for a while befo<!--  -->re logging in.</div>
 </c:if>
 <c:if test="${not empty checkMail}">
 	<div class="successblock">Password reset link has been sent to
@@ -150,15 +150,16 @@ body {
 		</form>
 	</div>
 
-	<%-- <form action="/facebook" method="POST">
+	<%-- <form action="/facebook" method="POST"> --%>
 		<div class="row row-centered">
 			<div class="col-lg-2 col-right">
-				<button type="button" class="btn btn-link btn-info btn-lg col-sm-2 ">
-					Login Using Facebook!
-				</button>	
+				<a href="<c:url value="/facebook" />">Login with Facebook</a>
+				<a href="<c:url value="/twitter" />">Login with Twitter</a>
+				<%-- <a href="<c:url value="/linkedin" />">Login with LinkedIn</a> --%>
+				<!-- <input type="image" id="saveForm" src="../images/facebook.png" alt="Submit Form"> -->	
 			</div>
 		</div>
-	</form> --%>
+	<%-- </form> --%>
 	<div id="ForgotPasswordModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
