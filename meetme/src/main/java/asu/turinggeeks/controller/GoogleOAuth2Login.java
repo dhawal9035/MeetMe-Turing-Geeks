@@ -1,3 +1,5 @@
+
+/*
 package com.crunchify.controller;
  
 import java.io.IOException;
@@ -13,12 +15,15 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+
+*/
  
 /*
  * author: Crunchify.com
  * 
  */
  
+/*
 @Controller
 public class GoogleOAuth2Login {
  
@@ -74,3 +79,5 @@ public @ResponseBody void CallSampleServlet(
 		
 	}
 }
+
+*/
