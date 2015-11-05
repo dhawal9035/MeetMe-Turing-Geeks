@@ -8,7 +8,7 @@
 <title>Enter New Password:</title>
 </head>
 <body>
-<h2>Enter New Password </h2>
+<h2>Enter New Password ${email} </h2>
 	<form:form role="form" method="POST" action="/meetme/updatePassword" commandName="userForm">
 		<table>
 			<tr>

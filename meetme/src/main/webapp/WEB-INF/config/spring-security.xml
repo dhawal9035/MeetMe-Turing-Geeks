@@ -18,6 +18,8 @@
 		<security:intercept-url pattern="/resetPassword" access="permitAll" />
 		<security:intercept-url pattern="/newPassword/*" access="permitAll" />
 		<security:intercept-url pattern="/updatePassword" access="permitAll" />
+		<security:intercept-url pattern="/calendar" access="permitAll" />
+		<security:intercept-url pattern="/manualCalendar" access="permitAll" />
   		<security:intercept-url pattern="/**" access="permitAll" />  
   		<security:form-login login-page="/login" default-target-url="/loginSuccess"
   		authentication-failure-url="/loginFailed" />  

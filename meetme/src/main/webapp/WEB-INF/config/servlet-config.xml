@@ -21,6 +21,8 @@
 	<util:properties id="applicationConfig" location="classpath:application.properties"/>
 	<context:property-placeholder properties-ref="applicationConfig"/>
 	
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+	
 	<bean id="dataSource"  
   		class="org.springframework.jdbc.datasource.DriverManagerDataSource">  
   		<property name="driverClassName" value="com.mysql.jdbc.Driver" />

@@ -85,7 +85,7 @@ public class LoginController {
 	@RequestMapping(value="/newPassword/{email}", method=RequestMethod.GET)
 	public String resetPassword(@PathVariable String email,@ModelAttribute("userForm") UserInfo userForm, Model model){
 		model.addAttribute("userForm", userForm);
-		model.addAttribute("email", userForm.getEmail());
+		model.addAttribute("email", email);
 		return "/newPassword";
 	}
 	
