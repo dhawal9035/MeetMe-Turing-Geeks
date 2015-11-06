@@ -14,64 +14,12 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="http://connect.facebook.net/en_US/all.js"></script>
-<style type="text/css">
-.errorblock {
-	color: #ff0000;
-	background-color: #ffEEEE;
-	border: 3px solid #ff0000;
-	padding: 8px;
-	margin: 16px;
-	width: 490px;
-}
-
-.successblock {
-	color: green;
-	background-color: #d9edf7;
-	border: 3px solid green;
-	padding: 8px;
-	margin: 16px;
-	width: 450px;
-}
-
-.row-centered {
-	text-align: center;
-}
-
-.row-right {
-	text-align: right;
-}
-
-body {
-	background-image: url("http://i.imgur.com/gHE631x.jpg");
-	background-color: #cccccc;
-}
-
-.col-centered {
-	display: inline-block;
-	float: none;
-	text-align: left;
-	margin-right: -4px;
-}
-
-.col-right {
-	display: inline-block;
-	float: none;
-	text-align: right;
-	margin-left
-	=-4px;
-}
-
-.vertical-center-container {
-	min-height: 100%;
-	min-height: 100vh;
-	/*display: flex;*/
-	align-items: center;
-	justify-content: center;
-	/*justify-content: center;*/
-	flex-direction: column;
-}
-</style>
+<link
+	href="<c:url value="/resources/stylesheets/style.css" />" rel="stylesheet">
+<script
+	src="<c:url value="/resources/js/jquery.js" />"></script>
+<script
+	src="<c:url value="/resources/js/script11.js" />"></script>
 <c:if test="${not empty error}">
 	<div class="errorblock">Your login attempt was unsuccessful,try
 		again. Caused :
@@ -199,49 +147,90 @@ body {
 					<form:form role="form" action="register" method="post"
 						commandName="userForm">
 						<div class="row">
+						<div
+							class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
+						<b>First Name*</b>
+						</div>
 							<div
 								class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
-								<form:input type="Text" class="form-control" path="firstName"
-									placeholder="Enter First Name" />
+								<form:input type="Text" id="signup_firstname" class="form-control" path="firstName"
+									placeholder="Enter First Name" />	
+							</div>
+							<div 
+								class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
+							<span class="error_form" id="username_error_message">dfd</span>
 							</div>
 						</div>
 						<div class="row">
+						<div
+							class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
+						<b>Last Name</b>
+						</div>
 							<div
 								class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
 								<form:input type="Text" class="form-control" path="lastName"
 									placeholder="Enter Last Name" />
+							</div>	
+							<div 
+								class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
+							<span></span>
 							</div>
 						</div>
 						<div class="row">
+						<div
+							class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
+						<b>Email*</b>
+						</div>
 							<div
 								class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
-								<form:input type="email" class="form-control" path="email"
+								<form:input type="text" id="signup_email" class="form-control" path="email"
 									placeholder="Enter Email" />
 							</div>
-						</div>
-
-						<div class="row">
-							<div
+							<div 
 								class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
-								<form:password class="form-control" path="password"
-									placeholder="Choose password" />
+						<span class="error_form" id="email_error_message">dfd</span>
 							</div>
 						</div>
-
-						<!-- <div class="row">
-						<div class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
-							<input type="pwd" class="form-control" id="signup_re_enter_pwd" placeholder="Re-enter Password">
+						<div class="row">
+						<div
+							class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
+						<b>Password*</b>
 						</div>
-					</div> 
+							<div
+								class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
+								<form:password class="form-control" id="signup_password" path="password"
+									placeholder="Choose password" />
+							</div>
+							<div 
+								class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
+							<span class="error_form" id="password_error_message">dfd</span>
+							</div>
+						</div>
+						 <div class="row">
+						 <div
+							class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
+						<b>Confirm Password*</b>
+						</div>
+						<div class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
+							<input type="password" class="form-control" id="signup_re_enter_pwd"  
+									placeholder="Re-enter your password" >
+						</div>
+						<div 
+								class="form-group has-warning has-feedback has-success col-lg-8 col-lg-offset-2 center-block col-centered">
+							<span class="error_form" id="repassword_error_message">dfd</span>
+							</div>
+						</div> 
 		
 					<div class="row">
 						<div class="checkbox col-sm-3 ">
-							<label><input type="checkbox">I Accept The Meet Me Terms and Conditions</label>
+							<label><input type="checkbox" id="checkbox" name="checkbox">I Accept The Meet Me Terms and Conditions</label>
 						</div>
-					</div> -->
-
+					</div>
+					<div class="row">
+					<p style="color:red">*Fields with asteriks are required</p>
+					</div>
 						<div class="modal-footer">
-							<input type="submit" class="btn btn-success col-sm-2"
+							<input type="submit" class="btn btn-success col-sm-2" id="terms_check"
 								value="Submit" />
 						</div>
 					</form:form>
