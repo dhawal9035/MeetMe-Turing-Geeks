@@ -18,7 +18,7 @@ $(document).ready(function(){
 	var counter = 1;
 	$('.datePair .time').timepicker({
 	    'showDuration': true,
-	    'timeFormat': 'g:ia'
+	    'timeFormat': 'H:i:s'
 	});
 
 	$('.datePair .date').datepicker({
@@ -38,11 +38,11 @@ $(document).ready(function(){
 	     .attr("id", 'Div' + counter); */
 	var newDiv = $('<div id="Div'+ counter +'">');
     var newDatePair = $("<div id='datePair"+counter+"'  class='datePair'>");
-    var input1 = $('<input id="startDate'+ counter +'" type="text" class="date start"/>');
-    var input2 = $('<input id="startTime'+ counter +'" type="text" class="time start ui-timepicker-input" />');
-    var word = $('<span>to</span>');
-    var input3 = $('<input id="endTime'+ counter +'" type="text" class="time end ui-timepicker-input" />');
-    var input4 = $('<input id="endDate'+ counter +'" type="text" class="date end"/>');
+    var input1 = $('<input name="startDate'+ counter +'" id="startDate'+ counter +'" type="text" class="date start"/>');
+    var input2 = $('<input name="startTime'+ counter +'" id="startTime'+ counter +'" type="text" class="time start ui-timepicker-input" />');
+    var word = $('<span> to </span>');
+    var input3 = $('<input name="endTime'+ counter +'" id="endTime'+ counter +'" type="text" class="time end ui-timepicker-input" />');
+    var input4 = $('<input name="endDate'+ counter +'" id="endDate'+ counter +'" type="text" class="date end"/>');
 	/* newDiv.after().html('<div id="datePair">');            
 	newDiv.after().html('<input class= "date start" type="text" id="startDate'+ counter +'" />');
 	newDiv.after().html('<input class= "time start ui-timepicker-input" type="text" id="startTime' + counter + '" />');
@@ -131,13 +131,13 @@ $(document).ready(function(){
 					<div id='TextBoxesGroup'>
 						<div id="Div0">
 							<div id="datePair" class="datePair">
-								<input id="startDate0" type="text" class="date start" />
-								<input id="startTime0" type="text" class="time start ui-timepicker-input"  /> to
-								<input id="endTime0" type="text" class="time end ui-timepicker-input" />
-								<input id="endDate0" type="text" class="date end"/>
+								<input name="startDate0" id="startDate0" type="text" class="date start" />
+								<input name="startTime0" id="startTime0" type="text" class="time start ui-timepicker-input"  /> to
+								<input name="endTime0" id="endTime0" type="text" class="time end ui-timepicker-input" />
+								<input name="endDate0" id="endDate0" type="text" class="date end"/>
 							</div>
 						</div>
-						<input name="counter" type="hidden" id="counter" value="" />
+						<input name="counter" type="hidden" id="counter" value="1" />
 					</div> 
 				</td>
 			</tr>
