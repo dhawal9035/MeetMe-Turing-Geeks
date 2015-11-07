@@ -1,0 +1,42 @@
+.container{
+	background-image:url("/resource/images/newyork3.jpg");
+	background-repeat: no-repeat;
+}
+.navbar-default{
+	box-shadow:none;
+	border:none;
+	background:transparent;
+	padding-top:15px;
+}
+.navbar-brand{
+	
+	width:150px;
+    height: 100px;
+    padding: 0px 0px;
+	box-shadow:none;
+    border:none;
+    
+}
+.navbar-nav{
+	float:right;
+	}
+.carousel-inner{
+	height: 500px;
+	width:	750px;
+	
+	
+}
+.carousel-inner>.item.active, .carousel-inner>.item.next.left, .carousel-inner>.item.prev.right{
+	height:500px;
+	width: 750px;
+	float:center;
+	
+}
+.carousel-inner>.item>a>img, .carousel-inner>.item>img, .img-responsive, .thumbnail a>img, .thumbnail>img{
+	height:500px;
+	width: 750px;
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+	
+}
