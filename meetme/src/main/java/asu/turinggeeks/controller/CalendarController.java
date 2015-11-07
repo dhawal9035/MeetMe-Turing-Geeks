@@ -48,8 +48,14 @@ public class CalendarController {
 				endDate[i] = (String) request.getParameter("endDate"+i+"");
 				endTime[i] = (String) request.getParameter("endTime"+i+"");
 			}
-			calendarService.insertForManualCalendar(startDate, startTime, endDate, endTime, calendar, emailId);
+			boolean check = calendarService.insertForManualCalendar(startDate, startTime, endDate, endTime, calendar, emailId);
+			if(check)
+				return "success";
+			else
+				return "failure";
 		}
-		return "success";
+		else
+			return "failure";
+		
 	}
 }

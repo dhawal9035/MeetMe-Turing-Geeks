@@ -59,7 +59,7 @@ $(document).ready(function(){
 	var id = "datePair"+counter;
 	$('.datePair .time').timepicker({
 	    'showDuration': true,
-	    'timeFormat': 'g:ia'
+	    'timeFormat': 'H:i:s'
 	});
 
 	$('.datePair .date').datepicker({
@@ -107,6 +107,7 @@ $(document).ready(function(){
     		 url:frm.attr('action'),
     		 data:frm.serialize(),
     		 success: function(data){
+    			 top.location.href = '/meetme/success';
     			 alert('Email has been sent with the meeting Invite');
     		 }
     	 });
