@@ -6,6 +6,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Schedule Events</title>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/Datepair.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.datepair.js"></script>
@@ -13,6 +15,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap-datepicker.js"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/stylesheets/jquery.timepicker.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/stylesheets/bootstrap-datepicker.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/stylesheets/mycalendarevent.css" />
 <script>
 $(document).ready(function(){
 	var counter = 1;
@@ -116,19 +119,30 @@ $(document).ready(function(){
   </script>
 </head>
 <body>
-	<form:form id="calendarSubmit" role="form" method="POST" action="/meetme/manualCalendar" commandName="calendar">
-		<table>
-			<tr>
-				<td>Event Name:</td>
-				<td><form:input type="text" path="eventName" placeholder="Enter Event Name" /> </td>
-			</tr>
-			<tr>
-				<td>Event Description</td>
-				<td><form:textarea rows="4" cols="50" path="eventDescription" placeholder="Enter Event Description" /> </td>
-			</tr>
-			<tr>
-				<td>Probable Date and Time of Event</td>
-				<td>
+<a href="http://www.animatedimages.org/cat-clocks-137.htm"><img src="http://www.animatedimages.org/data/media/137/animated-clock-image-0148.gif" alt="animated-clock-image-0148"/ class="clock1"></a>
+<a href="http://www.animatedimages.org/cat-clocks-137.htm"><img src="http://www.animatedimages.org/data/media/137/animated-clock-image-0025.gif" border="0" alt="animated-clock-image-0025" class="clock2"/></a>
+<div class="container">
+<h2>Create your event</h2>
+	<form:form id="calendarSubmit" role="form" method="POST" action="/meetme/manualCalendar" commandName="calendar" class="form-horizontal">
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="event-name">Event Name:</label>
+			<div class="col-sm-10">
+				<form:input type="text" path="eventName" placeholder="Enter Event Name" class="form-control" />
+			</div>
+			</div>
+	
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="event-name">Event Description:</label>
+			<div class="col-sm-10">				
+				<form:textarea rows="4" cols="50" path="eventDescription" placeholder="Give Event Description" class="form-control"/>
+			</div>
+	</div>
+	
+
+
+	<div class="row">
+		<label class="control-label col-sm-2" for="event-name">Probable Date and Time:</label>
+			<div class="col-md-8">
 					<div id='TextBoxesGroup'>
 						<div id="Div0">
 							<div id="datePair" class="datePair">
@@ -140,20 +154,24 @@ $(document).ready(function(){
 						</div>
 						<input name="counter" type="hidden" id="counter" value="1" />
 					</div> 
-				</td>
-			</tr>
-			<tr>
-				<td><input type='button' value='Add More Event Timings' id='addButton'> </td>
-				<td><input type='button' value='Remove the Last Added Event Time' id='removeButton'></td> 
-			</tr>
-			<tr>
-				<td>Enter Email ID separated by a comma</td>
-				<td><form:textarea rows="4" cols="50" path="guestEmail" placeholder="Enter Email ID's of people to be invited" /> </td>
-			</tr>
-			<tr>
-				<td colspan="2"><center><input type="Button" value="Submit" id="submit"> </center> </td>
-			</tr>
-		</table>
+			</div>
+					
+			<div class="col-md-2">
+	    	<input type='button' value='Add More' id='addButton' class="btn btn-info"> 
+			<input type='button' value='Remove' id='removeButton' class="btn-danger">
+			</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="event-name">Enter Email ID separated by a comma: </label>
+			<div class="col-sm-10">		
+
+				<form:textarea rows="4" cols="50" path="guestEmail" placeholder="Enter Email ID's of people to be invited" class="form-control" />
+			</div>
+	</div>
+			
+				<input type="Button" value="Done!" id="submit" class="btn btn-success col-sm-12"> 
 	</form:form> 
+</div>
 </body>
 </html>
