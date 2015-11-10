@@ -12,9 +12,9 @@ public class CalendarService {
 	@Autowired
 	CalendarDao calendarDao;
 	
-	public boolean insertForManualCalendar(String[] start, String[] end, Calendar calendar, String emailId) {
+	public boolean insertForManualCalendar(String[] start, String[] end, Calendar calendar, String emailId, String uuid) {
 		
-		return calendarDao.insertForManualCalendar(start, end, calendar, emailId);
+		return calendarDao.insertForManualCalendar(start, end, calendar, emailId, uuid);
 	}
 	
 }

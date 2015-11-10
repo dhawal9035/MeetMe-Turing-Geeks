@@ -16,16 +16,16 @@ public class CalendarDao {
 	String query = null;
 	JdbcTemplate jdbcTemplate;
 	
-	public boolean insertForManualCalendar(String[] start, String[] end, Calendar calendar, String emailId) {
+	public boolean insertForManualCalendar(String[] start, String[] end, Calendar calendar, String emailId, String uuid) {
 		int length = start.length;
 		try {
-			query = "INSERT INTO event_info " + "(event_name, email_id, event_description, guest_email) VALUES(?,?,?,?)";
+			query = "INSERT INTO event_info " + "(event_name, email_id, event_description, guest_email, uuid) VALUES(?,?,?,?,?)";
 			jdbcTemplate = new JdbcTemplate(dataSource);
 			jdbcTemplate.update(query, new Object[] { calendar.getEventName(), emailId, calendar.getEventDescription(),
-					calendar.getGuestEmail() });
+					calendar.getGuestEmail(), uuid });
 
-			query = "SELECT event_id from event_info where email_id = ? and event_name=?";
-				int eventId = jdbcTemplate.queryForObject(query, new Object[] {emailId,calendar.getEventName()}, Integer.class);
+			query = "SELECT event_id from event_info where uuid=?";
+				int eventId = jdbcTemplate.queryForObject(query, new Object[] {uuid}, Integer.class);
 
 			query = "INSERT into event_time_details " + "(event_id,start_time,end_time) VALUES(?,?,?)";
 			for (int i = 0; i < length; i++) {

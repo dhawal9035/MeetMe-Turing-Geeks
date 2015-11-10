@@ -1,5 +1,7 @@
 package asu.turinggeeks.controller;
 
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -32,8 +35,10 @@ public class CalendarController {
 	
 	@RequestMapping(value="/manualCalendar", method=RequestMethod.POST)
 	public String addCalendar(@ModelAttribute("calendar") Calendar calendar, Model model, HttpServletRequest request){
+		String uuid = UUID.randomUUID().toString();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String emailId= auth.getName();
+		System.out.println(uuid);
 		System.out.println(emailId);
 		String guestMail=calendar.getGuestEmail();
 		System.out.println(guestMail);
@@ -41,7 +46,6 @@ public class CalendarController {
 		System.out.println(counterString);
 		if (!StringUtils.isEmpty(counterString)) {
 			int counter=Integer.parseInt(counterString);
-			System.out.println();
 			String []startDate = new String[counter];
 			String []startTime = new String[counter];
 			String []endDate = new String[counter];
@@ -60,9 +64,9 @@ public class CalendarController {
 				end[i] = endDate[i] + " " + endTime[i];
 			}
 			
-			boolean check = calendarService.insertForManualCalendar(start, end, calendar, emailId);
+			boolean check = calendarService.insertForManualCalendar(start, end, calendar, emailId, uuid);
 			if(check){
-				mailService.sendInvite(emailId,start,end,calendar);
+				mailService.sendInvite(emailId,calendar,uuid);
 				return "success";
 			}
 			else
@@ -71,5 +75,12 @@ public class CalendarController {
 		else
 			return "failure";
 		
+	}
+	
+	@RequestMapping(value="/submitTiming/{uuid}", method=RequestMethod.GET)
+	public String userResponse(@PathVariable String uuid, Model model){
+		
+		System.out.println(uuid);
+		return "eventResponse";
 	}
 }
