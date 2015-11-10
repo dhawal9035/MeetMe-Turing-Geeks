@@ -6,9 +6,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Schedule Events</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/Datepair.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.datepair.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.timepicker.min.js"></script>
@@ -110,19 +110,20 @@ $(document).ready(function(){
     		 url:frm.attr('action'),
     		 data:frm.serialize(),
     		 success: function(data){
-    			 top.location.href = ""${pageContext.request.contextPath}"/success";
+    			 top.location.href = "${pageContext.request.contextPath}/success";
     			 alert('Email has been sent with the meeting Invite');
     		 }
-    	 	 error: function(data){
+    	 	 /* error: function(data){
     	 		 alert('There was an issue sending the information. Please schedule the meeting again.');
-    	 		top.location.href = ""${pageContext.request.contextPath}"/success";
-    	 	 }
+    	 		top.location.href = "${pageContext.request.contextPath}/success";
+    	 	 } */
     	 });
      });
   });
   </script>
 </head>
 <body>
+
 <a href="http://www.animatedimages.org/cat-clocks-137.htm"><img src="http://www.animatedimages.org/data/media/137/animated-clock-image-0148.gif" alt="animated-clock-image-0148"/ class="clock1"></a>
 <a href="http://www.animatedimages.org/cat-clocks-137.htm"><img src="http://www.animatedimages.org/data/media/137/animated-clock-image-0025.gif" border="0" alt="animated-clock-image-0025" class="clock2"/></a>
 <div class="container">

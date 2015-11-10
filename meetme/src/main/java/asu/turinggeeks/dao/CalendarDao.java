@@ -16,20 +16,8 @@ public class CalendarDao {
 	String query = null;
 	JdbcTemplate jdbcTemplate;
 	
-	public boolean insertForManualCalendar(String[] startDate, String[] startTime, String[] endDate, String[] endTime,
-			Calendar calendar, String emailId) {
-		int length = startDate.length;
-		String[] start = new String[length];
-		String[] end = new String[length];
-		/*String guestEmail = calendar.getGuestEmail();
-		
-		 * String singleMail[]= guestEmail.split(","); int totalEmailId =
-		 * singleMail.length;
-		 */
-		for (int i = 0; i < length; i++) {
-			start[i] = startDate[i] + " " + startTime[i];
-			end[i] = endDate[i] + " " + endTime[i];
-		}
+	public boolean insertForManualCalendar(String[] start, String[] end, Calendar calendar, String emailId) {
+		int length = start.length;
 		try {
 			query = "INSERT INTO event_info " + "(event_name, email_id, event_description, guest_email) VALUES(?,?,?,?)";
 			jdbcTemplate = new JdbcTemplate(dataSource);
@@ -48,6 +36,14 @@ public class CalendarDao {
 			e.printStackTrace();
 			return false;
 		}
+		
+	}
+
+	public String getFirstName(String email) {
+		query="Select first_name from user_info where email_id=?";
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		String firstName = jdbcTemplate.queryForObject(query, new Object[] {email},String.class);
+		return firstName;
 		
 	}
 

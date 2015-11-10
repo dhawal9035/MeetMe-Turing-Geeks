@@ -14,9 +14,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import asu.turinggeeks.model.Calendar;
 import asu.turinggeeks.service.CalendarService;
+import asu.turinggeeks.service.MailService;
 
 @Controller
 public class CalendarController {
+	
+	@Autowired
+	MailService mailService;
 	
 	@Autowired
 	CalendarService calendarService;
@@ -48,9 +52,19 @@ public class CalendarController {
 				endDate[i] = (String) request.getParameter("endDate"+i+"");
 				endTime[i] = (String) request.getParameter("endTime"+i+"");
 			}
-			boolean check = calendarService.insertForManualCalendar(startDate, startTime, endDate, endTime, calendar, emailId);
-			if(check)
+			int length = startDate.length;
+			String[] start = new String[length];
+			String[] end = new String[length];
+			for (int i = 0; i < length; i++) {
+				start[i] = startDate[i] + " " + startTime[i];
+				end[i] = endDate[i] + " " + endTime[i];
+			}
+			
+			boolean check = calendarService.insertForManualCalendar(start, end, calendar, emailId);
+			if(check){
+				mailService.sendInvite(emailId,start,end,calendar);
 				return "success";
+			}
 			else
 				return "failure";
 		}
