@@ -107,9 +107,13 @@ $(document).ready(function(){
     		 url:frm.attr('action'),
     		 data:frm.serialize(),
     		 success: function(data){
-    			 top.location.href = '/meetme/success';
+    			 top.location.href = ""${pageContext.request.contextPath}"/success";
     			 alert('Email has been sent with the meeting Invite');
     		 }
+    	 	 error: function(data){
+    	 		 alert('There was an issue sending the information. Please schedule the meeting again.');
+    	 		top.location.href = ""${pageContext.request.contextPath}"/success";
+    	 	 }
     	 });
      });
   });
