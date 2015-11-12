@@ -33,6 +33,16 @@ public class CalendarController {
 		return "calendar";
 	}
 	
+	@RequestMapping(value="/calendarEvent", method=RequestMethod.GET)
+	public String calendarInfo(@ModelAttribute("calendarInfo") Calendar calendar, Model model) {
+		return "success";
+	}
+	
+	@RequestMapping(value="/dashboard_landing", method=RequestMethod.GET)
+	public String calendarEvent(@ModelAttribute("calendarInfo") Calendar calendar, Model model) {
+		return "dashboard_landing";
+	}
+	
 	@RequestMapping(value="/manualCalendar", method=RequestMethod.POST)
 	public String addCalendar(@ModelAttribute("calendar") Calendar calendar, Model model, HttpServletRequest request){
 		String uuid = UUID.randomUUID().toString();
