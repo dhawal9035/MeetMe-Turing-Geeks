@@ -17,26 +17,38 @@
 		
 	</head>
 	<body>
-		<div class = "container">
+		<div class = "container-fluid">
 			<div class = "navbar navbar-default">
-				<div class=" navbar-header col-sm-4 col-md-6 col-lg-4 col-lg-offset-1" id="header1">
+				<div class=" navbar-header col-sm-4 col-md-6 col-lg-4 col-lg-offset-0" id="header1">
 					<a class="navbar-brand" href="#">
 						<img src="${pageContext.request.contextPath}/resources/images/earth1.png"/>
 					</a>
 						
 				</div>
-				<div class=" navbar-header col-sm-8 col-md-6 col-lg-6" id="header2">
+				<div class=" navbar-header col-sm-8 col-md-6 col-lg-8" id="header2">
 					<ul class="nav navbar-nav">
-						<li class= "active"> <a href="#" > <b>Home</b></a></li>
-						<li> <a href="#"> <b>Schedule a Meeting</b></a></li>
-						<li> <a href="#"> <b>User</b></a></li>
+						<li id = "list1"> <a href="#" > <b>Home</b></a></li>
+						<li id = "list2"> <a href="#"> <b>Schedule a Meeting</b></a></li>
+						<li id = "list3"> <a href="#"> <b>Calendar</b></a></li>
+						<li> 
+							<div class="dropdown">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">User
+								<span class="caret"></span></button>
+								<ul class="dropdown-menu">
+									<li><a href="#">About</a></li>
+									<li><a href="#">Setting</a></li>
+									<li><a href="#">Log out</a></li>
+								</ul>
+							</div>
+						</li>
 					</ul>
+					
 				</div>
 				
 			</div>
 			
 			<div class="row">
-				<div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
+				<div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0">
 					<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 						
 						<ol class="carousel-indicators">
@@ -73,14 +85,51 @@
 		</div>
   
   
-
 				
 		
 		
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"> </script>
-		
-	
+	<script src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
+	<script type ="text/javascript">
+		$(document).ready(function(){
+			
+					
+			
+			$("#list1").mouseover(function(){
+			
+				$(this).css('text-decoration','underline');
+				
+				
+			});
+			
+			$("#list1").mouseleave(function(){
+				$(this).css('text-decoration','none');
+			});
+			
+			$("#list2").mouseover(function(){
+			
+				$(this).css('text-decoration','underline');
+				
+			});
+			
+			$("#list2").mouseleave(function(){
+				$(this).css('text-decoration','none');
+			});
+			
+			
+			$("#list3").mouseover(function(){
+			
+				$(this).css('text-decoration','underline');
+				
+			});
+			
+			$("#list3").mouseleave(function(){
+				$(this).css('text-decoration','none');
+			});
+			
+		});
+	</script>
 	
 	</body>
 </html>
