@@ -22,6 +22,7 @@
 		<security:intercept-url pattern="/manualCalendar" access="permitAll" />
 		<security:intercept-url pattern="/eventResponse" access="permitAll" />
 		<security:intercept-url pattern="/dashboard_landing" access="permitAll" />
+		<security:intercept-url pattern="/response" access="permitAll" />
   		<security:intercept-url pattern="/**" access="permitAll" />  
   		<security:form-login login-page="/login" default-target-url="/loginSuccess"
   		authentication-failure-url="/loginFailed" />  

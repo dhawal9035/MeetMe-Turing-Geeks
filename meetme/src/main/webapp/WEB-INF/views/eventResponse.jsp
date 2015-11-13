@@ -9,7 +9,7 @@
 <title>Event Response</title>
 </head>
 <body>
-	<form method="post" action="${pageContext.request.contextPath}/response">
+	<form method="post" action="${pageContext.request.contextPath}/userResponse">
 		<table>
 			<tr>
 				<td>
@@ -25,20 +25,23 @@
 			</tr>
 			<tr>
 				<td>Event Description:</td>
-				<td><input type="text" name="eventDescription" value="${probableTimings[0].eventDescription}" readonly/></td>
+				<td>
+					<input type="text" name="eventDescription" value="${probableTimings[0].eventDescription}" readonly/>
+					<input type="hidden" name="uuid" value="${uuid}">
+				</td>
 			</tr>
+		</table> <br>
+		<table>
 			<thead>
 				<tr>
-					<th>Meeting Start Information</th>
-					<th>Meeting End Information</th>
+					<th>Please select your preferred time for the meeting below</th>
 				</tr>
 			</thead>
 			<tbody>
 				<c:set var="count" value="0" scope="page" />
 				<c:forEach var="request" items="${probableTimings}">
 					<tr>
-							<td><input type="checkbox" name="timing" value="start${count+1}"><c:out value="${request.startTime}"></c:out></td>
-							<td><input type="checkbox" name="timing" value="end${count+1}"><c:out value="${request.endTime}"></c:out></td>
+						<td><input type="checkbox" name="timing" value="${request.startTime},${request.endTime}"><c:out value="${request.startTime} to ${request.endTime}"></c:out></td>
 					</tr>
 				</c:forEach>
 			</tbody>

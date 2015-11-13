@@ -65,6 +65,14 @@ public class CalendarDao {
 		probableTimings = jdbcTemplate.query(query, new Object[] {eventId}, new CalendarRowMapper());
 		return probableTimings;
 	}
+
+	public void storeUserResponse(String guestMail, String[] checkedTimings, String uuid) {
+		query = "INSERT into guest_response " + " (uuid, guest_email,preferred_time) VALUES (?,?,?)";
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		for(int i=0;i<checkedTimings.length;i++){
+			jdbcTemplate.update(query, new Object[] { uuid, guestMail, checkedTimings[i]});
+		}
+	}
 	
 	
 

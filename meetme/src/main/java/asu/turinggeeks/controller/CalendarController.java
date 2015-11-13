@@ -91,9 +91,18 @@ public class CalendarController {
 	@RequestMapping(value="/submitTiming/{uuid}", method=RequestMethod.GET)
 	public String userResponse(@PathVariable String uuid, Model model){
 		int eventId = calendarService.getEventId(uuid);
+		model.addAttribute(uuid);
 		List<Calendar> probableTimings = calendarService.getAllEventDetails(eventId);
-		System.out.println(probableTimings);
 		model.addAttribute("probableTimings", probableTimings);
 		return "eventResponse";
+	}
+	
+	@RequestMapping(value="userResponse", method=RequestMethod.POST)
+	public String saveResponse(Model model, HttpServletRequest request){
+		String guestMail=request.getParameter("email");
+		String[] checkedTimings = request.getParameterValues("timing");
+		String uuid = request.getParameter("uuid");
+		calendarService.storeUserResponse(guestMail,checkedTimings,uuid);
+		return "response";
 	}
 }

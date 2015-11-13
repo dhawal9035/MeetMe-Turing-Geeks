@@ -27,6 +27,10 @@ public class CalendarService {
 		List<Calendar> probableTimings = calendarDao.getAllEventDetails(eventId);
 		return probableTimings;
 	}
+
+	public void storeUserResponse(String guestMail, String[] checkedTimings, String uuid) {
+		calendarDao.storeUserResponse(guestMail,checkedTimings,uuid);
+	}
 	
 }
 
