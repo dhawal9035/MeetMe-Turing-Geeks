@@ -596,8 +596,8 @@ table.fc-border-separate {
 <div class="collapse navbar-collapse navbar-ex1-collapse">
 	<ul class="nav navbar-nav side-nav">
 		<li> <br/> <a href="#"> Dashboard</a></li> 
-		<li> <br/> <a href="#"> Schedule </a></li> 
-		<li> <br/> <a href="#"> My Calenders</a></li> 
+		<li> <br/> <a href="${pageContext.request.contextPath}/dashboard_landing"> Schedule </a></li> 
+		<li> <br/> <a href="${pageContext.request.contextPath}/calendar"> My Calenders</a></li> 
 		<li> <br/> <a href="#"> Import Calenders</a></li> 
 		<li> <br/> <a href="#"> Import Contacts</a></li>
 	</ul>

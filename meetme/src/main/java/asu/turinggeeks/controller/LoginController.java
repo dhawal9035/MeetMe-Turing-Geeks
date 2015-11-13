@@ -105,4 +105,9 @@ public class LoginController {
 			return "login";
 		}
 	}
+	
+	@RequestMapping(value="/success")
+	public String redirectToSuccess(Model model){
+		return "success";
+	}
 }
