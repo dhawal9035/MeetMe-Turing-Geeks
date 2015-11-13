@@ -1,4 +1,4 @@
-<%@ page encoding="java" contentType="text/html; charset=ISO-8859-1" 
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" 
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -504,7 +504,7 @@
 				$('#eventModal').modal('show'); // popping my modal to create event
 				$("#modal-body").load('calendar.jsp'); //load up modal-body content
 
-			    $("#submit").bind("click",{allDay}, function(event){ // when you click in a create button inside dialog you should send as parameters start,end,etc
+			    $("#submit").bind("click", function(event){ // when you click in a create button inside dialog you should send as parameters start,end,etc
 			    	$event_name = $("#event_name").val();
 			    	$event_description = $("#event_description").val();
 			    	$start_date = $("#startDate0").val();
@@ -634,7 +634,7 @@
 				</div>
 				
 				<div class="modal-body">
-					<form:form id="calendarSubmit" role="form" method="POST" action="/meetme/manualCalendar" commandName="calendar" class="form-horizontal">
+					<form:form id="calendarSubmit" role="form" method="POST" action="/meetme/calendarEvent" commandName="calendarInfo" class="form-horizontal">
 	<div class="form-group">
 		<label class="control-label col-sm-2" for="event-name">Event Name:</label>
 			<div class="col-sm-10">
@@ -647,39 +647,7 @@
 			<div class="col-sm-10">				
 				<form:textarea rows="4" cols="50" id="event_description" path="eventDescription" placeholder="Give Event Description" class="form-control"/>
 			</div>
-	</div>
-	
-
-
-	<div class="row">
-		<label class="control-label col-sm-2" for="event-name">Probable Date and Time:</label>
-			<div class="col-md-8">
-					<div id='TextBoxesGroup'>
-						<div id="Div0">
-							<div id="datePair" class="datePair">
-								<input name="startDate0" id="startDate0" type="text" class="date start" />
-								<input name="startTime0" id="startTime0" type="text" class="time start ui-timepicker-input"  /> to
-								<input name="endTime0" id="endTime0" type="text" class="time end ui-timepicker-input" />
-								<input name="endDate0" id="endDate0" type="text" class="date end"/>
-							</div>
-						</div>
-						<input name="counter" type="hidden" id="counter" value="1" />
-					</div> 
-			</div>
-					
-			<div class="col-md-2">
-	    	<input type='button' value='Add More' id='addButton' class="btn btn-info"> 
-			<input type='button' value='Remove' id='removeButton' class="btn-danger">
-			</div>
-	</div>
-
-	<div class="form-group">
-		<label class="control-label col-sm-2" for="event-name">Enter Email ID separated by a comma: </label>
-			<div class="col-sm-10">		
-
-				<form:textarea rows="4" cols="50" id="mailing_list" path="guestEmail" placeholder="Enter Email ID's of people to be invited" class="form-control" />
-			</div>
-	</div>
+	</div>	
 			
 				<input type="Button" value="Done!" id="submit" class="btn btn-success col-sm-12"> 
 	</form:form> 	
