@@ -1,5 +1,6 @@
 package asu.turinggeeks.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,17 +71,19 @@ public class CalendarController {
 				return "success";
 			}
 			else
-				return "failure";
+				return "error";
 		}
 		else
-			return "failure";
+			return "error";
 		
 	}
 	
 	@RequestMapping(value="/submitTiming/{uuid}", method=RequestMethod.GET)
 	public String userResponse(@PathVariable String uuid, Model model){
-		
-		System.out.println(uuid);
+		int eventId = calendarService.getEventId(uuid);
+		List<Calendar> probableTimings = calendarService.getAllEventDetails(eventId);
+		System.out.println(probableTimings);
+		model.addAttribute("probableTimings", probableTimings);
 		return "eventResponse";
 	}
 }

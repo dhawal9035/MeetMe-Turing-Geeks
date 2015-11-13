@@ -1,5 +1,7 @@
 package asu.turinggeeks.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,15 @@ public class CalendarService {
 	public boolean insertForManualCalendar(String[] start, String[] end, Calendar calendar, String emailId, String uuid) {
 		
 		return calendarDao.insertForManualCalendar(start, end, calendar, emailId, uuid);
+	}
+
+	public int getEventId(String uuid) {
+		return calendarDao.getEventId(uuid);
+	}
+
+	public List<Calendar> getAllEventDetails(int eventId) {
+		List<Calendar> probableTimings = calendarDao.getAllEventDetails(eventId);
+		return probableTimings;
 	}
 	
 }

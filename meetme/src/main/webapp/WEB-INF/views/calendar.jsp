@@ -42,23 +42,29 @@ $(document).ready(function(){
 	var newDiv = $('<div id="Div'+ counter +'">');
     var newDatePair = $("<div id='datePair"+counter+"'  class='datePair'>");
     var input1 = $('<input name="startDate'+ counter +'" id="startDate'+ counter +'" type="text" class="date start"/>');
+    var space1 = $('<span> </span>');
     var input2 = $('<input name="startTime'+ counter +'" id="startTime'+ counter +'" type="text" class="time start ui-timepicker-input" />');
     var word = $('<span> to </span>');
     var input3 = $('<input name="endTime'+ counter +'" id="endTime'+ counter +'" type="text" class="time end ui-timepicker-input" />');
+    var space2 = $('<span> </span>');
     var input4 = $('<input name="endDate'+ counter +'" id="endDate'+ counter +'" type="text" class="date end"/>');
+    var newLine = $('<br/>');
 	/* newDiv.after().html('<div id="datePair">');            
 	newDiv.after().html('<input class= "date start" type="text" id="startDate'+ counter +'" />');
 	newDiv.after().html('<input class= "time start ui-timepicker-input" type="text" id="startTime' + counter + '" />');
 	newDiv.after().html('<input class= "time end" type="text" id="endTime' + counter + '" />');
 	newDiv.after().html('<input class= "date end" type="text" id="endDate' + counter + '" />');
 	newDiv.after().html('</div>');  */
-	$( "#TextBoxesGroup" ).append( newDiv);
-	$(newDiv).append( newDatePair);
-	$( newDatePair ).append( input1);
-	$( newDatePair ).append( input2);
+	$( "#TextBoxesGroup" ).append(newDiv);
+	$(newDiv).append(newDatePair);
+	$( newDatePair ).append(input1);
+	$( newDatePair ).append(space1);
+	$( newDatePair ).append(input2);
 	$( newDatePair ).append(word);
-	$( newDatePair ).append( input3);
-	$( newDatePair ).append( input4);
+	$( newDatePair ).append(input3);
+	$( newDatePair ).append(space2);
+	$( newDatePair ).append(input4);
+	$( newDatePair ).append(newLine);
 	var id = "datePair"+counter;
 	$('.datePair .time').timepicker({
 	    'showDuration': true,
@@ -113,9 +119,9 @@ $(document).ready(function(){
     			 top.location.href = "${pageContext.request.contextPath}/success";
     			 alert('Email has been sent with the meeting Invite');
     		 }
-    	 	 /* error: function(data){
+    	 	 /* /* error: function(data){
     	 		 alert('There was an issue sending the information. Please schedule the meeting again.');
-    	 		top.location.href = "${pageContext.request.contextPath}/success";
+    	 		top.location.href = "${pageContext.request.contextPath}/calendar"; 
     	 	 } */
     	 });
      });
@@ -124,58 +130,50 @@ $(document).ready(function(){
 </head>
 <body>
 
-<a href="http://www.animatedimages.org/cat-clocks-137.htm"><img src="http://www.animatedimages.org/data/media/137/animated-clock-image-0148.gif" alt="animated-clock-image-0148"/ class="clock1"></a>
-<a href="http://www.animatedimages.org/cat-clocks-137.htm"><img src="http://www.animatedimages.org/data/media/137/animated-clock-image-0025.gif" border="0" alt="animated-clock-image-0025" class="clock2"/></a>
 <div class="container">
 <h2>Create your event</h2>
 	<form:form id="calendarSubmit" role="form" method="POST" action="/meetme/manualCalendar" commandName="calendar" class="form-horizontal">
 	<div class="form-group">
 		<label class="control-label col-sm-2" for="event-name">Event Name:</label>
-			<div class="col-sm-10">
+			<div class="col-sm-4">
 				<form:input type="text" path="eventName" placeholder="Enter Event Name" class="form-control" />
 			</div>
-			</div>
-	
+	</div>
 	<div class="form-group">
 		<label class="control-label col-sm-2" for="event-name">Event Description:</label>
-			<div class="col-sm-10">				
+			<div class="col-sm-4">				
 				<form:textarea rows="4" cols="50" path="eventDescription" placeholder="Give Event Description" class="form-control"/>
 			</div>
 	</div>
-	
-
-
 	<div class="row">
 		<label class="control-label col-sm-2" for="event-name">Probable Date and Time:</label>
 			<div class="col-md-8">
-					<div id='TextBoxesGroup'>
-						<div id="Div0">
-							<div id="datePair" class="datePair">
-								<input name="startDate0" id="startDate0" type="text" class="date start" />
-								<input name="startTime0" id="startTime0" type="text" class="time start ui-timepicker-input"  /> to
-								<input name="endTime0" id="endTime0" type="text" class="time end ui-timepicker-input" />
-								<input name="endDate0" id="endDate0" type="text" class="date end"/>
-							</div>
+				<div id='TextBoxesGroup'>
+					<div id="Div0">
+						<div id="datePair" class="datePair">
+							<input name="startDate0" id="startDate0" type="text" class="date start" />
+							<input name="startTime0" id="startTime0" type="text" class="time start ui-timepicker-input"  /> to
+							<input name="endTime0" id="endTime0" type="text" class="time end ui-timepicker-input" />
+							<input name="endDate0" id="endDate0" type="text" class="date end"/>
 						</div>
-						<input name="counter" type="hidden" id="counter" value="1" />
-					</div> 
-			</div>
-					
-			<div class="col-md-2">
-	    	<input type='button' value='Add More' id='addButton' class="btn btn-info"> 
-			<input type='button' value='Remove' id='removeButton' class="btn-danger">
+					</div>
+					<input name="counter" type="hidden" id="counter" value="1" />
+				</div> 
+			</div>					
+			<div class="col-md-1">
+	    		<input type='button' value='Add More' id='addButton' class="btn btn-success">
+	    	</div>
+	    	<div class="col-md-1"> 
+				<input type='button' value='Remove' id='removeButton' class="btn btn-danger">
 			</div>
 	</div>
-
 	<div class="form-group">
 		<label class="control-label col-sm-2" for="event-name">Enter Email ID separated by a comma: </label>
-			<div class="col-sm-10">		
-
+			<div class="col-sm-4">		
 				<form:textarea rows="4" cols="50" path="guestEmail" placeholder="Enter Email ID's of people to be invited" class="form-control" />
 			</div>
 	</div>
-			
-				<input type="Button" value="Done!" id="submit" class="btn btn-success col-sm-12"> 
+		<input type="Button" value="Done!" id="submit" class="btn btn-success"> 
 	</form:form> 
 </div>
 </body>

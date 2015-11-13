@@ -1,11 +1,14 @@
 package asu.turinggeeks.dao;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import asu.turinggeeks.mapper.CalendarRowMapper;
 import asu.turinggeeks.model.Calendar;
 
 @Repository
@@ -46,5 +49,23 @@ public class CalendarDao {
 		return firstName;
 		
 	}
+
+	public int getEventId(String uuid) {
+		query = "SELECT event_id from event_info where uuid=?";
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		int eventId = jdbcTemplate.queryForObject(query, new Object[] {uuid}, Integer.class);
+		return eventId;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Calendar> getAllEventDetails(int eventId) {
+		List<Calendar> probableTimings = null;
+		query = "select EI.event_name, EI.event_description, ET.start_time, ET.end_time from event_info as EI, event_time_details as ET where EI.event_id = ET.event_id and EI.event_id=?";
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		probableTimings = jdbcTemplate.query(query, new Object[] {eventId}, new CalendarRowMapper());
+		return probableTimings;
+	}
+	
+	
 
 }
