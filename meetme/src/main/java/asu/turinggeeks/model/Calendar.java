@@ -8,7 +8,8 @@ public class Calendar {
 	private String endTime;
 	
 	//private ArrayList<String> endDate;
-	private String guestEmail;
+	private String guestRequiredEmail;
+	private String guestOptionalEmail;
 	//private ArrayList<DateTime> dateTime;
 	
 	public Calendar() {
@@ -27,13 +28,19 @@ public class Calendar {
 	public String getEndTime() {
 		return endTime;
 	}
-	public String getGuestEmail() {
-		return guestEmail;
-	}
-	public void setGuestEmail(String guestEmail) {
-		this.guestEmail = guestEmail;
-	}
 	
+	public String getGuestRequiredEmail() {
+		return guestRequiredEmail;
+	}
+	public void setGuestRequiredEmail(String guestRequiredEmail) {
+		this.guestRequiredEmail = guestRequiredEmail;
+	}
+	public String getGuestOptionalEmail() {
+		return guestOptionalEmail;
+	}
+	public void setGuestOptionalEmail(String guestOptionalEmail) {
+		this.guestOptionalEmail = guestOptionalEmail;
+	}
 	public String getEventName() {
 		return eventName;
 	}

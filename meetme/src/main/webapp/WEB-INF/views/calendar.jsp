@@ -168,9 +168,15 @@ $(document).ready(function(){
 			</div>
 	</div>
 	<div class="form-group">
-		<label class="control-label col-sm-2" for="event-name">Enter Email ID separated by a comma: </label>
+		<label class="control-label col-sm-2" for="event-name">Required People: </label>
 			<div class="col-sm-4">		
-				<form:textarea rows="4" cols="50" path="guestEmail" placeholder="Enter Email ID's of people to be invited" class="form-control" />
+				<form:textarea rows="4" cols="50" path="guestRequiredEmail" placeholder="Enter Email ID's of people who are required to attend the meeting" class="form-control" />
+			</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="event-name">Optional People: </label>
+			<div class="col-sm-4">		
+				<form:textarea rows="4" cols="50" path="guestOptionalEmail" placeholder="Enter Email ID's of people who are optional for the meeting" class="form-control" />
 			</div>
 	</div>
 		<input type="Button" value="Done!" id="submit" class="btn btn-success"> 

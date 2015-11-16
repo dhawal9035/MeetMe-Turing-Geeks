@@ -49,12 +49,7 @@ public class CalendarController {
 		String uuid = UUID.randomUUID().toString();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String emailId= auth.getName();
-		System.out.println(uuid);
-		System.out.println(emailId);
-		String guestMail=calendar.getGuestEmail();
-		System.out.println(guestMail);
 		String counterString = (String) request.getParameter("counter");
-		System.out.println(counterString);
 		if (!StringUtils.isEmpty(counterString)) {
 			int counter=Integer.parseInt(counterString);
 			String []startDate = new String[counter];
@@ -77,7 +72,8 @@ public class CalendarController {
 			
 			boolean check = calendarService.insertForManualCalendar(start, end, calendar, emailId, uuid);
 			if(check){
-				mailService.sendInvite(emailId,calendar,uuid);
+				mailService.sendRequiredInvite(emailId,calendar,uuid);
+				mailService.sendOptionalInvite(emailId,calendar,uuid);
 				return "success";
 			}
 			else
@@ -102,7 +98,16 @@ public class CalendarController {
 		String guestMail=request.getParameter("email");
 		String[] checkedTimings = request.getParameterValues("timing");
 		String uuid = request.getParameter("uuid");
-		calendarService.storeUserResponse(guestMail,checkedTimings,uuid);
+		String userType = calendarService.checkUserType(guestMail, uuid);
+		System.out.println(userType);
+		if(userType.equals("required"))
+			calendarService.storeRequiredUserResponse(guestMail,checkedTimings,uuid);
+		else if(userType.equals("optional"))
+			calendarService.storeOptionalUserResponse(guestMail,checkedTimings,uuid);
+		else {
+			model.addAttribute("error", "error");
+			return "submitTiming/"+uuid+"";
+		}
 		return "response";
 	}
 }

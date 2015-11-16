@@ -26,7 +26,8 @@
 			<tr>
 				<td>Event Description:</td>
 				<td>
-					<input type="text" name="eventDescription" value="${probableTimings[0].eventDescription}" readonly/>
+					<textarea readonly="readonly">${probableTimings[0].eventDescription}</textarea>
+					<%-- <input type="text"  name="eventDescription" value="${probableTimings[0].eventDescription}" readonly/> --%>
 					<input type="hidden" name="uuid" value="${uuid}">
 				</td>
 			</tr>
