@@ -12,14 +12,7 @@
  * the License.
  */
 
-package com.google.api.services.samples.plus;
-
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.util.DateTime;
-import com.google.api.services.calendar.model.CalendarList;
-import com.google.api.services.calendar.model.Event;
-import com.google.api.services.calendar.model.Events;
+package com.mkyong.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,6 +22,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.model.CalendarList;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.Events;
 
 
 public class PlusSampleServlet extends HttpServlet {
@@ -58,7 +58,6 @@ public class PlusSampleServlet extends HttpServlet {
     }
     ----*/
     //Prafull
-	// ADding commit comment
     if (credential_calendar == null) {
       // If we don't have a token in store, redirect to authorization screen.
       resp.sendRedirect(
