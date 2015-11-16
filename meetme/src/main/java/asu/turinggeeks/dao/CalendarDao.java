@@ -22,10 +22,10 @@ public class CalendarDao {
 	public boolean insertForManualCalendar(String[] start, String[] end, Calendar calendar, String emailId, String uuid) {
 		int length = start.length;
 		try {
-			query = "INSERT INTO event_info " + "(event_name, email_id, event_description, guest_email, uuid) VALUES(?,?,?,?,?)";
+			query = "INSERT INTO event_info " + "(event_name, email_id, event_description, guest_required_email, guest_optional_email, uuid) VALUES(?,?,?,?,?,?)";
 			jdbcTemplate = new JdbcTemplate(dataSource);
 			jdbcTemplate.update(query, new Object[] { calendar.getEventName(), emailId, calendar.getEventDescription(),
-					calendar.getGuestEmail(), uuid });
+					calendar.getGuestRequiredEmail(), calendar.getGuestOptionalEmail(), uuid });
 
 			query = "SELECT event_id from event_info where uuid=?";
 				int eventId = jdbcTemplate.queryForObject(query, new Object[] {uuid}, Integer.class);
@@ -66,14 +66,50 @@ public class CalendarDao {
 		return probableTimings;
 	}
 
-	public void storeUserResponse(String guestMail, String[] checkedTimings, String uuid) {
-		query = "INSERT into guest_response " + " (uuid, guest_email,preferred_time) VALUES (?,?,?)";
+	public void storeRequiredUserResponse(String guestRequiredMail, String[] checkedTimings, String uuid) {
+		query = "INSERT into guest_required_response " + " (uuid, guest_required_email,preferred_time) VALUES (?,?,?)";
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		for(int i=0;i<checkedTimings.length;i++){
-			jdbcTemplate.update(query, new Object[] { uuid, guestMail, checkedTimings[i]});
+			jdbcTemplate.update(query, new Object[] { uuid, guestRequiredMail, checkedTimings[i]});
 		}
 	}
 	
-	
+	public void storeOptionalUserResponse(String guestOptionalMail, String[] checkedTimings, String uuid) {
+		query = "INSERT into guest_optional_response " + " (uuid, guest_optional_email,preferred_time) VALUES (?,?,?)";
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		for(int i=0;i<checkedTimings.length;i++){
+			jdbcTemplate.update(query, new Object[] { uuid, guestOptionalMail, checkedTimings[i]});
+		}
+	}
 
+	public String checkUserType(String guestMail, String uuid) {
+		query = "SELECT guest_required_email from event_info where uuid=?";
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		String requiredPerson = jdbcTemplate.queryForObject(query, new Object[] {uuid}, String.class);
+		String[] splitRequired = requiredPerson.split(",");
+		boolean rFlag = false;
+		for(int i=0; i<splitRequired.length; i++){
+			if(guestMail.equalsIgnoreCase(splitRequired[i])){
+				rFlag=true;
+				break;
+			}
+		}
+		
+		query = "SELECT guest_optional_email from event_info where uuid=?";
+		String optionalPerson = jdbcTemplate.queryForObject(query, new Object[] {uuid}, String.class);
+		String[] splitOptional = optionalPerson.split(",");
+		boolean oFlag= false;
+		for(int i=0;i<splitOptional.length;i++){
+			if(guestMail.equalsIgnoreCase(splitOptional[i])){
+				oFlag=true;
+				break;
+			}
+		}
+		if(rFlag)
+			return "required";
+		else if(oFlag)
+			return "optional";
+		else
+			return "absent";
+	}
 }

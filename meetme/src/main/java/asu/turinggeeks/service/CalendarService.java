@@ -28,8 +28,16 @@ public class CalendarService {
 		return probableTimings;
 	}
 
-	public void storeUserResponse(String guestMail, String[] checkedTimings, String uuid) {
-		calendarDao.storeUserResponse(guestMail,checkedTimings,uuid);
+	public void storeRequiredUserResponse(String guestRequiredMail, String[] checkedTimings, String uuid) {
+		calendarDao.storeRequiredUserResponse(guestRequiredMail,checkedTimings,uuid);
+	}
+	
+	public void storeOptionalUserResponse(String guestOptionalMail, String[] checkedTimings, String uuid) {
+		calendarDao.storeOptionalUserResponse(guestOptionalMail,checkedTimings,uuid);
+	}
+
+	public String checkUserType(String guestMail, String uuid) {
+		return calendarDao.checkUserType(guestMail,uuid);
 	}
 	
 }
