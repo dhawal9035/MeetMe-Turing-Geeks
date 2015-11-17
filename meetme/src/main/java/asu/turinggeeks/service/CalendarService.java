@@ -18,6 +18,12 @@ public class CalendarService {
 		
 		return calendarDao.insertForManualCalendar(start, end, calendar, emailId, uuid);
 	}
+	
+	public boolean insertForGoogleCalendar(String[] start, String[] end, Calendar calendar, String emailId, String uuid) {
+		
+		return calendarDao.insertForGoogleCalendar(start, end, calendar, emailId, uuid);
+	}
+
 
 	public int getEventId(String uuid) {
 		return calendarDao.getEventId(uuid);

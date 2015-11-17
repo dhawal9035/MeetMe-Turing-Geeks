@@ -10,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 //import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -36,9 +37,14 @@ import com.google.api.services.calendar.model.Events;
 import com.google.api.services.oauth2.Oauth2;
 import com.google.api.services.oauth2.model.Userinfoplus;
 
+import asu.turinggeeks.service.CalendarService;
+
 @Controller
 public class GoogleController {
 	
+	
+	@Autowired
+	CalendarService calendarService;
 	private static int counter = 0;
 	private static final String VIEW_INDEX = "index";
 	//private final static org.slf4j.Logger logger = LoggerFactory.getLogger(GoogleController.class);
@@ -121,10 +127,12 @@ public @ResponseBody String CallSampleServlet_sub(
 	    	System.out.println("Upcoming events");
 	        for (Event event : items) {
 	            DateTime start = event.getStart().getDateTime();
+	            DateTime end = event.getEnd().getDateTime();
 	            if (start == null) {
-	                start = event.getStart().getDate();
+	                start = event.getStart().getDateTime();
+	                end = event.getEnd().getDateTime(); 
 	            }
-	            System.out.printf("%s (%s)\n", event.getSummary(), start);
+	            System.out.printf("%s (%s) end - (%s)\n", event.getSummary(), start,end);
 	        }
 	    } 
 	  final HttpRequestFactory requestFactory = httpTransport.createRequestFactory(credential);
@@ -144,6 +152,8 @@ public @ResponseBody String CallSampleServlet_sub(
 		 Userinfoplus user = usergson.fromJson(jsonIdentity, Userinfoplus.class);
 		 System.out.println(user.getFamilyName()+ "  "+ user.getGivenName()+ " "+ user.getEmail());
 		System.out.println(jsonIdentity);
+		
+		//boolean check = calendarService.insertForManualCalendar(start, end, calendar, user.getEmail(), uuid);
 		return VIEW_INDEX;
 		
 		
