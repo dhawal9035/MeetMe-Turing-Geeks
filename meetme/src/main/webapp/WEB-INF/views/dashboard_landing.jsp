@@ -10,9 +10,17 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,default-scale=1">
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-	<script src="calenderGrid.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
+	
+	<script src="${pageContext.request.contextPath}/resources/js/fullcalendar.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/fullcalendar.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/stylesheets/fullcalendar.css" />
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/stylesheets/fullcalendar.min.css" />
+	
 	<style>
 		.fc {
 			direction: ltr;
@@ -485,8 +493,7 @@
 
 	</style>
 	<script type="text/javascript">
-        $.getScript('http://arshaw.com/js/fullcalendar-1.6.4/fullcalendar/fullcalendar.min.js',function(){
-  
+	$(document).ready(function(){
 		  var date = new Date();
 		  var d = date.getDate();
 		  var m = date.getMonth();
@@ -507,33 +514,41 @@
 			    $("#submit").bind("click", function(event){ // when you click in a create button inside dialog you should send as parameters start,end,etc
 			    	$event_name = $("#event_name").val();
 			    	$event_description = $("#event_description").val();
-			    	$start_date = $("#startDate0").val();
+			    	var moment1 = $('#calendar').fullCalendar('getDate');
+			        alert("The current date of the calendar is " + moment.format());
+			    	/* $start_date = $("#startDate0").val();
 			    	$start_time = $("#startTime0").val();
 			    	$end_date = $("#endDate0").val();
 			    	$end_time = $("#endTime0").val();
-			    	$mailing_list = $("#mailing_list").val();
+			    	$mailing_list = $("#mailing_list").val(); */
 
 			            if ($event_name) {
 
-			                $mycalendar.fullCalendar('renderEvent',
+			            /* 	$('#calendar').fullCalendar('renderEvent',
 			                {
-			                    id: $id, 
+			                    //id: $id, 
 			                    title: $event_name,
-			                    start: $start_time,
+			                    /* start: $start_time,
 			                    end: $end_time,
-			                    allDay: allDay,
-			                    url: $url //look at this code with extra care
-			                },
-			                true 
-			                );
+			                    allDay: allDay
+			                    /* url: "${pageContext.request.contextPath}/dashboard_landing" //look at this code with extra care 
+			                },true); */
+			                
+			                var myCalendar = $('#calendar'); 
+			                myCalendar.fullCalendar();
+			                var myEvent = {
+			                  title:$event_name,
+			                  allDay: true,
+			                  start: moment1.format(),
+			                  end: moment1.format()
+			                };
+			                myCalendar.fullCalendar( 'renderEvent', myEvent, true );
 
 
 			            }else{
-			                $mycalendar.fullCalendar('unselect');
+			            	$('#calendar').fullCalendar('unselect');
 			            }
-
-
-			        $('#eventModal').dialog('close');// close my dialog
+			        $('#eventModal').modal('toggle');// close my dialog
 
 			    });
 			},
@@ -585,7 +600,7 @@
 			  }
 			]
 		  });
-		})
+	});
     </script>
 
 </head>
