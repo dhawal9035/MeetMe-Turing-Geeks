@@ -515,7 +515,7 @@
 			    	$event_name = $("#event_name").val();
 			    	$event_description = $("#event_description").val();
 			    	var moment1 = $('#calendar').fullCalendar('getDate');
-			        alert("The current date of the calendar is " + moment.format());
+			        alert("The current date of the calendar is " + moment1.format());
 			    	/* $start_date = $("#startDate0").val();
 			    	$start_time = $("#startTime0").val();
 			    	$end_date = $("#endDate0").val();
