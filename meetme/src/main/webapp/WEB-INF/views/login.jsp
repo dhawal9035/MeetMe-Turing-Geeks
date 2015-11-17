@@ -104,6 +104,7 @@
 			<div class="col-lg-2 col-right">
 				<a href="<c:url value="/facebook" />">Login with Facebook</a>
 				<a href="<c:url value="/twitter" />">Login with Twitter</a>
+				<a href="<c:url value="/google" />">Login with Google</a>
 				<%-- <a href="<c:url value="/linkedin" />">Login with LinkedIn</a> --%>
 				<!-- <input type="image" id="saveForm" src="../images/facebook.png" alt="Submit Form"> -->	
 			</div>

@@ -41,6 +41,32 @@ public class CalendarDao {
 		}
 		
 	}
+	
+	public boolean insertForGoogleCalendar(String[] start, String[] end, Calendar calendar, String emailId, String uuid) {
+		try {
+			query = "INSERT INTO event_info " + "(event_name, email_id, event_description, start_date_google , end_date_google, start_time_google, end_time_google, guest_optional_email, uuid) VALUES(?,?,?,?,?,?)";
+			jdbcTemplate = new JdbcTemplate(dataSource);
+			jdbcTemplate.update(query, new Object[] { calendar.getEventName(), emailId, calendar.getEventDescription(),
+					calendar.getGuestRequiredEmail(), calendar.getGuestOptionalEmail(), uuid });
+
+			/*query = "SELECT event_id from event_info where uuid=?";
+				int eventId = jdbcTemplate.queryForObject(query, new Object[] {uuid}, Integer.class);
+
+			query = "INSERT into event_time_details " + "(event_id,start_time,end_time) VALUES(?,?,?)";
+			for (int i = 0; i < length; i++) {
+				jdbcTemplate.update(query, new Object[] { eventId, start[i], end[i] });
+			}*/
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+	
+	
+		
+	
 
 	public String getFirstName(String email) {
 		query="Select first_name from user_info where email_id=?";
