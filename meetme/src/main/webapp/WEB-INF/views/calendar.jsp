@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -16,6 +18,8 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/stylesheets/jquery.timepicker.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/stylesheets/bootstrap-datepicker.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/stylesheets/mycalendarevent.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/stylesheets/fullcalendar.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/stylesheets/fullcalendar.min.css" />
 <script>
 $(document).ready(function(){
 	var counter = 1;
@@ -130,24 +134,56 @@ $(document).ready(function(){
 </head>
 <body>
 
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#"> Meet Me!</a>
+		</div>
+		<div>
+		<ul class="nav navbar-nav">
+			<li class="active"><a href="${pageContext.request.contextPath}/dashboard_landing">Home</a>
+			<li><a href="#">Contact Us</a>
+			<li><a href="#">Settings</a>
+			<li><a href="#">Profile</a>
+			<li><button type="button" class="btn btn-success pull-right" aria-label="profile">
+				<span class="glyphicon  glyphicon-user" style="vertical-align:middle, horizontal-align:right" aria-hidden="true">
+				</span>
+			</button>
+		</ul>
+		</div>
+	</div>
+</nav>
+<br>
+<br>
+<br>
+<br>
+
+	<div class="col-md-2" style=" padding-top: 20px;">
+		<ul class="nav nav-pills nav-stacked" >
+			<li><a href="${pageContext.request.contextPath}/schedule">Schedule</a>
+			<li class="active"><a href="${pageContext.request.contextPath}/calendar">Manual Schedule</a>
+			<li><a href="#">My Calendar</a>
+			<li><a href="#">Import Calendars</a>
+		</ul>
+	</div>
 <div class="container">
 <h2>Create your event</h2>
 	<form:form id="calendarSubmit" role="form" method="POST" action="/meetme/manualCalendar" commandName="calendar" class="form-horizontal">
-	<div class="form-group">
-		<label class="control-label col-sm-2" for="event-name">Event Name:</label>
-			<div class="col-sm-4">
+	<div class="form-group" style=" margin-left: 0px; width: 800px; height: 65px; padding-top: 7px;margin-bottom: 0px;">
+		<label class="control-label col-sm-2" for="event-name" style="text-align: center;">Event Name:</label>
+			<div class="col-sm-4" style="padding-left: 75px; padding-right: 0px; width: 395px;">
 				<form:input type="text" path="eventName" placeholder="Enter Event Name" class="form-control" />
 			</div>
 	</div>
-	<div class="form-group">
-		<label class="control-label col-sm-2" for="event-name">Event Description:</label>
-			<div class="col-sm-4">				
-				<form:textarea rows="4" cols="50" path="eventDescription" placeholder="Give Event Description" class="form-control"/>
+	<div class="form-group" style="width: 1000px;margin-bottom: 0px;">
+		<label class="control-label col-sm-2" for="event-description">Event Description:</label>
+			<div class="col-sm-4" style="width: 380px; padding-left: 40px;">				
+				<form:textarea rows="3" cols="50" path="eventDescription" placeholder="Give Event Description" class="form-control"/>
 			</div>
 	</div>
-	<div class="row">
-		<label class="control-label col-sm-2" for="event-name">Probable Date and Time:</label>
-			<div class="col-md-8">
+	<div class="row" style="padding-top: 25px; padding-bottom: 25px;">
+		<label class="control-label col-sm-2" for="event-name" style="width: 340px;padding-left: 50px;">Probable Date and Time:</label>
+			<div class="col-md-8" style="padding-left: 0px;">
 				<div id='TextBoxesGroup'>
 					<div id="Div0">
 						<div id="datePair" class="datePair">
@@ -160,26 +196,26 @@ $(document).ready(function(){
 					<input name="counter" type="hidden" id="counter" value="1" />
 				</div> 
 			</div>					
-			<div class="col-md-1">
+			<div class="col-md-1" style="padding-top: 10px;">
 	    		<input type='button' value='Add More' id='addButton' class="btn btn-success">
 	    	</div>
-	    	<div class="col-md-1"> 
+	    	<div class="col-md-1" style="padding-top: 10px;"> 
 				<input type='button' value='Remove' id='removeButton' class="btn btn-danger">
 			</div>
 	</div>
 	<div class="form-group">
-		<label class="control-label col-sm-2" for="event-name">Required People: </label>
-			<div class="col-sm-4">		
-				<form:textarea rows="4" cols="50" path="guestRequiredEmail" placeholder="Enter Email ID's of people who are required to attend the meeting" class="form-control" />
+		<label class="control-label col-sm-2" for="event-name" style="width: 290px;">Required People: </label>
+			<div class="col-sm-4" style=" width: 393px; padding-left: 48px;">		
+				<form:textarea rows="3" cols="50" path="guestRequiredEmail" placeholder="Enter Email ID's of people who are required to attend the meeting" class="form-control" />
 			</div>
 	</div>
 	<div class="form-group">
-		<label class="control-label col-sm-2" for="event-name">Optional People: </label>
-			<div class="col-sm-4">		
-				<form:textarea rows="4" cols="50" path="guestOptionalEmail" placeholder="Enter Email ID's of people who are optional for the meeting" class="form-control" />
+		<label class="control-label col-sm-2" for="event-name" style="width: 290px;">Optional People: </label>
+			<div class="col-sm-4" style=" width: 393px; padding-left: 48px;">		
+				<form:textarea rows="3" cols="50" path="guestOptionalEmail" placeholder="Enter Email ID's of people who are optional for the meeting" class="form-control" />
 			</div>
 	</div>
-		<input type="Button" value="Done!" id="submit" class="btn btn-success"> 
+		<button type="button" id="submit" class="btn btn-success">Done!</button> 
 	</form:form> 
 </div>
 </body>

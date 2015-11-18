@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import asu.turinggeeks.model.Calendar;
 import asu.turinggeeks.model.UserInfo;
 import asu.turinggeeks.service.LoginService;
 import asu.turinggeeks.service.MailService;
@@ -34,8 +35,10 @@ public class LoginController {
 	
 	@RequestMapping(value="/loginSuccess", method=RequestMethod.GET)
 	public String register(Model model){
+		Calendar calendarInfo = new Calendar();
 		UserInfo userForm = new UserInfo();
 		model.addAttribute("userForm", userForm);
+		model.addAttribute("calendarInfo", calendarInfo);
 		return "success";
 	}
 	
