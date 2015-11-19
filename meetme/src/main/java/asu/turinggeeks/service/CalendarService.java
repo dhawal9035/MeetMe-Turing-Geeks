@@ -2,6 +2,7 @@ package asu.turinggeeks.service;
 
 import java.util.List;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,10 @@ public class CalendarService {
 
 	public String checkUserType(String guestMail, String uuid) {
 		return calendarDao.checkUserType(guestMail,uuid);
+	}
+
+	public JSONObject fetchCalendarData(String emailId) {
+		return calendarDao.fetchCalendarData(emailId);
 	}
 	
 }

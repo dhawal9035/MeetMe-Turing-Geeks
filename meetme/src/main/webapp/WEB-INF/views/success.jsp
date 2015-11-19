@@ -29,10 +29,32 @@
 		  var y = date.getFullYear();
 		  
 		  $('#calendar').fullCalendar({
+			  
+			events: function(start, end, callback) {
+		        $.ajax({
+		            url: '${pageContext.request.contextPath}/calendarFetch',
+		            dataType: "json",
+		            data: {
+		                start: start.unix(),
+		                end: end.unix()
+		            },
+		            success: function(doc) {
+		                var events = [];
+		                $(doc).find('event').each(function() {
+		                    events.push({
+		                        title: $(this).attr('title'),
+		                        start: $(this).attr('start') // will be parsed
+		                    });
+		                });
+		                callback(events);
+		            }
+		        });
+		    },
 			header: {
 			  left: 'prev,next today',
 			  center: 'title',
 			  right: 'month,agendaWeek,agendaDay'
+			  
 			},
 			selectable: true,
 			selectHelper: true,
@@ -81,53 +103,7 @@
 
 			    });
 			},
-			editable: true,
-			events: [
-			  {
-				title: '',
-				start: new Date(y, m, 1)
-			  },
-			  {
-				title: '',
-				start: new Date(y, m, d-5),
-				end: new Date(y, m, d-2)
-			  },
-			  {
-				id: 999,
-				title: '',
-				start: new Date(y, m, d-3, 16, 0),
-				allDay: false
-			  },
-			  {
-				id: 999,
-				title: '',
-				start: new Date(y, m, d+4, 16, 0),
-				allDay: false
-			  },
-			  {
-				title: '',
-				start: new Date(y, m, d, 10, 30),
-				allDay: false
-			  },
-			  {
-				title: '',
-				start: new Date(y, m, d, 12, 0),
-				end: new Date(y, m, d, 14, 0),
-				allDay: false
-			  },
-			  {
-				title: '',
-				start: new Date(y, m, d+1, 19, 0),
-				end: new Date(y, m, d+1, 22, 30),
-				allDay: false
-			  },
-			  {
-				title: '',
-				start: new Date(y, m, 28),
-				end: new Date(y, m, 29),
-				url: 'http://google.com/'
-			  }
-			]
+			editable: true,			
 		  });
 	});
     </script>
@@ -164,8 +140,8 @@
 		<ul class="nav nav-pills nav-stacked" >
 			<li class="active"><a href="#">Schedule</a>
 			<li><a href="${pageContext.request.contextPath}/calendar">Manual Schedule</a>
-			<li><a href="#">My Calendar</a>
-			<li><a href="#">Import Calendars</a>
+			<li><a href="mycalendarevent">My Calendar</a>
+			<li><a href="${pageContext.request.contextPath}/calendarFetch">Import Calendars</a>
 		</ul>
 	</div>
 

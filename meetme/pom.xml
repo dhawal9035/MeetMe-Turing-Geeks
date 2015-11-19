@@ -42,7 +42,7 @@
 	<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-beans</artifactId>
-		<version>4.1.1.RELEASE</version>
+		<version>3.2.3.RELEASE</version>
 	</dependency>
 	
     
@@ -149,34 +149,41 @@
 	<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-core</artifactId>
-		<version>4.1.7.RELEASE</version>
+		<version>3.2.3.RELEASE</version>
 	</dependency>
 	<dependency>
 		<groupId>org.slf4j</groupId>
 		<artifactId>jcl-over-slf4j</artifactId>
 		<version>1.7.5</version>
 	</dependency>
-	<dependency>
+	<!-- <dependency>
 		<groupId>ch.qos.logback</groupId>
 		<artifactId>logback-classic</artifactId>
 		<version>1.1.3</version>
-	</dependency>
+	</dependency> -->
 	<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-web</artifactId>
-		<version>4.1.1.RELEASE</version>
+		<version>3.2.3.RELEASE</version>
 	</dependency>
 	
 	<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-aop</artifactId>
-		<version>4.1.1.RELEASE</version>
+		<version>3.2.3.RELEASE</version>
 	</dependency>
 	<dependency>
 		<groupId>com.google.apis</groupId>
 		<artifactId>google-api-services-oauth2</artifactId>
 		<version>v2-rev65-1.17.0-rc</version>
 	</dependency>
+	
+	<dependency>
+    <groupId>com.googlecode.json-simple</groupId>
+    <artifactId>json-simple</artifactId>
+    <version>1.1.1</version>
+	</dependency>
+	
 	<dependency>
 		<groupId>javax.jdo</groupId>
 		<artifactId>jdo2-api</artifactId>

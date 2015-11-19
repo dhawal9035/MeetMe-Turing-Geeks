@@ -1,15 +1,19 @@
 package asu.turinggeeks.dao;
 
+import java.io.FileWriter;
 import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import asu.turinggeeks.mapper.CalendarRowMapper;
 import asu.turinggeeks.model.Calendar;
+
 
 @Repository
 public class CalendarDao {
@@ -138,4 +142,47 @@ public class CalendarDao {
 		else
 			return "absent";
 	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject fetchCalendarData(String emailId) {
+		List<Calendar> calendarData = null;
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		JSONArray jArray = new JSONArray();
+		query = "select EI.event_name, EI.event_description, ET.start_time, ET.end_time from event_info as EI, event_time_details as ET where EI.event_id = ET.event_id and EI.email_id=?";
+		calendarData = jdbcTemplate.query(query, new Object[] {emailId}, new CalendarRowMapper());
+		for(int i=0; i<calendarData.size(); i++){
+			String eventNameJson = calendarData.get(i).getEventName();
+			String eventStartTimeJson = calendarData.get(i).getStartTime();
+			String eventEndTimeJson = calendarData.get(i).getEndTime();
+			JSONObject jObj = new JSONObject();
+			jObj.put("title", eventNameJson);
+		    jObj.put("start", eventStartTimeJson);
+		    jObj.put("end", eventEndTimeJson);
+		    jArray.add(jObj);
+		}
+		JSONObject jObjDevice = new JSONObject();
+		jObjDevice.put("device", jArray);
+		JSONObject jObjDeviceList = new JSONObject();
+		jObjDeviceList.put("devicelist", jObjDevice);
+		try{
+			FileWriter fileWriter = new FileWriter("D:\\data.json");
+			fileWriter.write(jObjDeviceList.toJSONString());
+			fileWriter.flush();
+			fileWriter.close();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		System.out.println("Zafar");
+		return jObjDeviceList;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }
