@@ -84,6 +84,10 @@ public boolean insertForGoogleCalendar(List<Calendar> calendar, String emailId, 
 		return calendarDao.getResponseCounter(uuid);
 	}
 	
+	public JSONObject fetchCalendarData(String emailId) {
+		return calendarDao.fetchCalendarData(emailId);
+	}
+	
 }
 
 	
