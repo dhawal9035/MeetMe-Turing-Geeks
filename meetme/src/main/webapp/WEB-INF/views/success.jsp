@@ -29,6 +29,27 @@
 		  var y = date.getFullYear();
 		  
 		  $('#calendar').fullCalendar({
+			  
+			events: function(start, end, callback) {
+		        $.ajax({
+		            url: '${pageContext.request.contextPath}/calendarFetch',
+		            dataType: "json",
+		            data: {
+		                start: start.unix(),
+		                end: end.unix()
+		            },
+		            success: function(doc) {
+		                var events = [];
+		                $(doc).find('event').each(function() {
+		                    events.push({
+		                        title: $(this).attr('title'),
+		                        start: $(this).attr('start') // will be parsed
+		                    });
+		                });
+		                callback(events);
+		            }
+		        });
+		    },
 			header: {
 			  left: 'prev,next today',
 			  center: 'title',
