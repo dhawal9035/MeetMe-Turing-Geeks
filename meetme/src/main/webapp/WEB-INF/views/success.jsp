@@ -30,18 +30,22 @@
 		  
 		  $('#calendar').fullCalendar({
 			  
-			events: function(start, end, callback) {
+			events: function(start, end, timezone, callback) {
 		        $.ajax({
 		            url: '${pageContext.request.contextPath}/calendarFetch',
 		            dataType: "json",
+
 		            data: {
 		                start: start.unix(),
 		                end: end.unix()
 		            },
 		            success: function(doc) {
+		            	alert("data111");
 		                var events = [];
 		                $(doc).find('event').each(function() {
+		                	alert("data1112222");
 		                    events.push({
+		                    	
 		                        title: $(this).attr('title'),
 		                        start: $(this).attr('start') // will be parsed
 		                    });
@@ -50,6 +54,13 @@
 		            }
 		        });
 		    },
+		    eventRender: function(event, element) {
+		        element.qtip({
+		            content: events.title
+		        });
+		    },
+		    
+		    
 			header: {
 			  left: 'prev,next today',
 			  center: 'title',
