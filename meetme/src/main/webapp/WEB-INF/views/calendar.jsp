@@ -164,6 +164,7 @@ $(document).ready(function(){
 			<li class="active"><a href="${pageContext.request.contextPath}/calendar">Manual Schedule</a>
 			<li><a href="#">My Calendar</a>
 			<li><a href="#">Import Calendars</a>
+			<li><a href="${pageContext.request.contextPath}/meetingTime">Get Meeting Time</a>
 		</ul>
 	</div>
 <div class="container">

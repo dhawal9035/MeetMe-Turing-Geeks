@@ -8,7 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import asu.turinggeeks.mapper.CalendarEventRowMapper;
 import asu.turinggeeks.mapper.CalendarRowMapper;
+import asu.turinggeeks.mapper.EndSlotMapper;
+import asu.turinggeeks.mapper.OptionalSlotMapper;
+import asu.turinggeeks.mapper.RequiredSlotMapper;
+import asu.turinggeeks.mapper.StartSlotMapper;
 import asu.turinggeeks.model.Calendar;
 
 @Repository
@@ -98,6 +103,19 @@ public class CalendarDao {
 		for(int i=0;i<checkedTimings.length;i++){
 			jdbcTemplate.update(query, new Object[] { uuid, guestRequiredMail, checkedTimings[i]});
 		}
+		query = "Select count(*) from required_counter where uuid=?";
+		int counter = jdbcTemplate.queryForObject(query, new Object[] {uuid}, Integer.class);
+		if(counter == 0){
+			query = "INSERT into required_counter " + " (uuid,counter) VALUES (?,?)";
+			jdbcTemplate.update(query, new Object[] {uuid,1});
+		}
+		else{
+			query = "Select counter from required_counter where uuid=?";
+			int counterValue = jdbcTemplate.queryForObject(query, new Object[] {uuid}, Integer.class);
+			query = "Update required_counter SET counter = ? where uuid=?";
+			jdbcTemplate.update(query, new Object[] {counterValue+1,uuid});
+		}
+		
 	}
 	
 	public void storeOptionalUserResponse(String guestOptionalMail, String[] checkedTimings, String uuid) {
@@ -113,6 +131,9 @@ public class CalendarDao {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		String requiredPerson = jdbcTemplate.queryForObject(query, new Object[] {uuid}, String.class);
 		String[] splitRequired = requiredPerson.split(",");
+		for(int i=0; i<splitRequired.length;i++){
+			splitRequired[i]=splitRequired[i].trim();
+		}
 		boolean rFlag = false;
 		for(int i=0; i<splitRequired.length; i++){
 			if(guestMail.equalsIgnoreCase(splitRequired[i])){
@@ -124,6 +145,9 @@ public class CalendarDao {
 		query = "SELECT guest_optional_email from event_info where uuid=?";
 		String optionalPerson = jdbcTemplate.queryForObject(query, new Object[] {uuid}, String.class);
 		String[] splitOptional = optionalPerson.split(",");
+		for(int i=0; i<splitOptional.length;i++){
+			splitOptional[i]=splitOptional[i].trim();
+		}
 		boolean oFlag= false;
 		for(int i=0;i<splitOptional.length;i++){
 			if(guestMail.equalsIgnoreCase(splitOptional[i])){
@@ -137,5 +161,67 @@ public class CalendarDao {
 			return "optional";
 		else
 			return "absent";
+	}
+
+	public String getUuid(String emailId) {
+		query = "SELECT uuid from event_info where email_id=?";
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		String uuid = jdbcTemplate.queryForObject(query, new Object[] {emailId}, String.class);
+		return uuid;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Calendar> getAllEvents(String emailId) {
+		List<Calendar> allEvents = null;
+		query = "select event_id, event_name, event_description, uuid from event_info where email_id=?;";
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		allEvents = jdbcTemplate.query(query, new Object[] {emailId}, new CalendarEventRowMapper());
+		return allEvents;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Calendar> getStartSlot(int eventId) {
+		List<Calendar> startSlot = null;
+		query = "select start_time from event_time_details where event_id=?";
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		startSlot = jdbcTemplate.query(query, new Object[] {eventId}, new StartSlotMapper());
+		return startSlot;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Calendar> getEndSlot(int eventId) {
+		List<Calendar> endSlot = null;
+		query = "select end_time from event_time_details where event_id=?";
+		endSlot = jdbcTemplate.query(query, new Object[] {eventId}, new EndSlotMapper());
+		return endSlot;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Calendar> getRequiredSlot(String uuid) {
+		List<Calendar> requiredSlot = null;
+		query = "select preferred_time from guest_required_response where uuid=?";
+		requiredSlot = jdbcTemplate.query(query, new Object[] {uuid}, new RequiredSlotMapper());
+		return requiredSlot;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Calendar> getOptionalSlot(String uuid) {
+		List<Calendar> optionalSlot = null;
+		query = "select preferred_time from guest_optional_response where uuid=?";
+		optionalSlot = jdbcTemplate.query(query, new Object[] {uuid}, new OptionalSlotMapper());
+		return optionalSlot;
+	}
+
+	public int getRequiredCounter(String uuid) {
+		query="Select guest_required_email from event_info where uuid=?";
+		String mail = jdbcTemplate.queryForObject(query, new Object[]{uuid},String.class);
+		String[] splitRequired = mail.split(",");
+		return splitRequired.length;
+	}
+
+	public int getResponseCounter(String uuid) {
+		query="Select counter from required_counter where uuid=?";
+		int counter = jdbcTemplate.queryForObject(query, new Object[]{uuid},Integer.class);
+		return counter;
 	}
 }

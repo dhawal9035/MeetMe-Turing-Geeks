@@ -50,7 +50,7 @@ public class CalendarController {
 	}
 	
 	@RequestMapping(value="/manualCalendar", method=RequestMethod.POST)
-	public String addCalendar(@ModelAttribute("calendar") Calendar calendar, Model model, HttpServletRequest request){
+	public String addCalendar(@ModelAttribute("calendar") Calendar calendar, @ModelAttribute("calendarInfo") Calendar calendarInfo, Model model, HttpServletRequest request){
 		String uuid = UUID.randomUUID().toString();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String emailId= auth.getName();
@@ -74,11 +74,11 @@ public class CalendarController {
 				start[i] = startDate[i] + " " + startTime[i];
 				end[i] = endDate[i] + " " + endTime[i];
 			}
-			
 			boolean check = calendarService.insertForManualCalendar(start, end, calendar, emailId, uuid);
 			if(check){
 				mailService.sendRequiredInvite(emailId,calendar,uuid);
 				mailService.sendOptionalInvite(emailId,calendar,uuid);
+				model.addAttribute("calendarInfo", calendarInfo);
 				return "success";
 			}
 			else
@@ -114,5 +114,39 @@ public class CalendarController {
 			return "submitTiming/"+uuid+"";
 		}
 		return "response";
+	}
+	
+	@RequestMapping(value="meetingTime", method = RequestMethod.GET)
+	public String getMeetingPage(Model model){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String emailId= auth.getName();
+		List <Calendar> allEvents = calendarService.getAllEvents(emailId);
+		model.addAttribute("allEvents",allEvents);
+		return "meetingTime";
+	}
+	
+	@RequestMapping(value="getTime/*", method = RequestMethod.GET)
+	public String getMeetingTime(Model model, HttpServletRequest request){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String emailId= auth.getName();
+		int eventId= Integer.parseInt(request.getParameter("eventId"));
+		String uuid = request.getParameter("uuid");
+		//String uuid = "4dc9a7e7-b675-4780-a24f-af8a8de185cd";
+		//int eventId=18;
+		List<Calendar> startSlot = calendarService.getStartSlot(eventId);
+		List<Calendar> endSlot = calendarService.getEndSlot(eventId);
+		List<Calendar> requiredSlot = calendarService.getRequiredSlot(uuid);
+		List<Calendar> optionalSlot = calendarService.getOptionalSlot(uuid);
+		int responseCounter = calendarService.getResponseCounter(uuid);
+		int requiredCounter = calendarService.getRequiredCounter(uuid);
+		
+		if(responseCounter == requiredCounter){
+			System.out.println("Majai Gai "+requiredCounter);
+		}
+		else{
+			System.out.println("Na Majai "+responseCounter);
+		}
+		
+		return "meetingTime";
 	}
 }

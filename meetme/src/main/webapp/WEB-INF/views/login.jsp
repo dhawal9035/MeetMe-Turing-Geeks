@@ -84,12 +84,20 @@
 			<div class="row row-centered">
 				<div class="col-lg-13 col-right">
 					<button type="button"
-						class="btn btn-link btn-info btn-lg col-sm-2 " data-toggle="modal"
+						class="btn btn-link btn-lg col-sm-2 " data-toggle="modal"
 						data-target="#ForgotPasswordModal">Forgot Password?</button>
 				</div>
 			</div>
 
 			<div class="row row-centered">
+				<div class="col-lg-2 col-right">
+					<a href="<c:url value="/facebook" />"><img
+						src="${pageContext.request.contextPath}/resources/images/facebook-login.png" /></a>
+
+					<a href="<c:url value="/google" />">Login with Google</a>
+					<%-- <a href="<c:url value="/linkedin" />">Login with LinkedIn</a> --%>
+					<!-- <input type="image" id="saveForm" src="../images/facebook.png" alt="Submit Form"> -->
+				</div>
 				<div class="col-lg-2 col-right">
 					<button type="button"
 						class="btn btn-link btn-info btn-lg col-sm-2 " data-toggle="modal"
@@ -101,13 +109,7 @@
 
 	<%-- <form action="/facebook" method="POST"> --%>
 		<div class="row row-centered">
-			<div class="col-lg-2 col-right">
-				<a href="<c:url value="/facebook" />">Login with Facebook</a>
-				<a href="<c:url value="/twitter" />">Login with Twitter</a>
-				<a href="<c:url value="/google" />">Login with Google</a>
-				<%-- <a href="<c:url value="/linkedin" />">Login with LinkedIn</a> --%>
-				<!-- <input type="image" id="saveForm" src="../images/facebook.png" alt="Submit Form"> -->	
-			</div>
+			
 		</div>
 	<%-- </form> --%>
 	<div id="ForgotPasswordModal" class="modal fade" role="dialog">

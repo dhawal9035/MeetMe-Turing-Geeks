@@ -1,11 +1,15 @@
 package asu.turinggeeks.model;
 
 public class Calendar {
+	private int eventId;
+	private String uuid;
 	private String eventName;
 	private String eventDescription;
 	//private ArrayList<String> startDate;
 	private String startTime;
 	private String endTime;
+	private String requiredTime;
+	private String optionalTime;
 	
 	//private ArrayList<String> endDate;
 	private String guestRequiredEmail;
@@ -52,6 +56,30 @@ public class Calendar {
 	}
 	public void setEventDescription(String eventDescription) {
 		this.eventDescription = eventDescription;
+	}
+	public int getEventId() {
+		return eventId;
+	}
+	public void setEventId(int eventId) {
+		this.eventId = eventId;
+	}
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	public String getRequiredTime() {
+		return requiredTime;
+	}
+	public void setRequiredTime(String requiredTime) {
+		this.requiredTime = requiredTime;
+	}
+	public String getOptionalTime() {
+		return optionalTime;
+	}
+	public void setOptionalTime(String optionalTime) {
+		this.optionalTime = optionalTime;
 	}
 	
 	/*public ArrayList<DateTime> getDateTime() {
