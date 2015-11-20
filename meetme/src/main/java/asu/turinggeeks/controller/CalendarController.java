@@ -1,10 +1,17 @@
 package asu.turinggeeks.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -97,6 +104,80 @@ public class CalendarController {
 		model.addAttribute("probableTimings", probableTimings);
 		return "eventResponse";
 	}
+
+	@RequestMapping(value = "/algorithm", method = RequestMethod.GET)
+	public String triggerAlgorithm(String[] slots_timings, String[] reqResponseStr, String[] optResponseStr ) {
+
+		
+		String[] slotsTimingStart= {"2014/04/23 00:00:00","2014/04/23 2:00:00","2014/04/23 12:00:00"};
+		String[] slotsTimingEnd= {
+				"2014/04/23 01:00:00",
+				"2014/04/23 3:00:00",
+				"2014/04/23 14:00:00"};
+		String[] reqResponse= {
+				"2014/04/23 00:00:00,2014/04/23 01:00:00",
+				"2014/04/23 2:00:00,2014/04/23 3:00:00",
+				"2014/04/23 2:00:00,2014/04/23 3:00:00",
+				"2014/04/23 2:00:00,2014/04/23 3:00:00",
+				"2014/04/23 12:00:00,2014/04/23 14:00:00",
+				"2014/04/23 12:00:00,2014/04/23 14:00:00"};
+		String[] optResponse= {
+				"2014/04/23 00:00:00,2014/04/23 01:00:00",
+				"2014/04/23 2:00:00,2014/04/23 3:00:00",
+				"2014/04/23 2:00:00,2014/04/23 3:00:00",
+				"2014/04/23 12:00:00,2014/04/23 14:00:00"};
+		HashMap<String, Integer> hash = new HashMap<String, Integer>();
+		Integer count = 0;
+		String slot = "";
+		for(int i =0;i<slotsTimingEnd.length;i++)
+		{
+			slot = slotsTimingStart[i]+","+slotsTimingEnd[i];
+			hash.put( slot , new Integer(0));
+		}
+		
+		for(String slotTemp: reqResponse )
+		{
+				count = hash.get(slotTemp) ;
+				if(count!=null)
+					hash.put(slotTemp, ++count);
+				System.out.println(slotTemp.split(","));
+		}
+		for(String slotTemp: optResponse )
+		{
+				count = hash.get(slotTemp) ;
+				if (count!=null)
+					hash.put(slotTemp, ++count);
+		}
+		
+		String[] slotTimes = new String[2];
+		String temp = new String();
+		LocalDateTime dt2;
+		TreeMap<Integer, String> tMap = new TreeMap<Integer,String>();
+		for( Map.Entry<String, Integer> map : hash.entrySet() )
+		{
+			temp = map.getKey();
+			slotTimes = temp.split(",");
+			dt2 = LocalDateTime.parse(slotTimes[0], 
+			        DateTimeFormat.forPattern("yyyy/MM/dd HH:mm:ss"));
+			if(dt2.getHourOfDay()<20 && dt2.getHourOfDay()>9)
+			{
+				int i = hash.get(temp);
+				hash.put(temp, ++i );
+			}
+			tMap.put(hash.get(temp), temp);
+		}
+		
+		System.out.println(tMap.entrySet());
+		ArrayList<Integer> ctr = new ArrayList<Integer>();
+		ctr.addAll(hash.values());
+		Collections.sort(ctr);
+		
+		System.out.println(ctr.toString());
+
+		return "success";
+		
+	}
+
 	
 	@RequestMapping(value="userResponse", method=RequestMethod.POST)
 	public String saveResponse(Model model, HttpServletRequest request){
