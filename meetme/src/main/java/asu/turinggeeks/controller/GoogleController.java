@@ -130,31 +130,39 @@ public String CallSampleServlet_sub(
 	    System.out.println("No upcoming events first found.");
 	    List<Event> items = events.getItems();
 	    List<Calendar> cal = new ArrayList<Calendar>();
+	    DateTime start,end;
+	    String st_str,end_str;
 	    if (items.size() == 0) {
 	        System.out.println("No upcoming events found.");
 	    } else {
 	    	
 	    	System.out.println("Upcoming events");
 	        for (Event event : items) {
-	            DateTime start = event.getStart().getDateTime();
-	            DateTime end = event.getEnd().getDateTime();
+	            start = event.getStart().getDateTime();
+	            
+	            end = event.getEnd().getDateTime();
+	   
+	        
 	            if (start == null) {
 	                start = event.getStart().getDateTime();
 	                end = event.getEnd().getDateTime(); 
 	            }
 	            if (start !=null){
 	            Calendar tempCal = new Calendar();
-	            	tempCal.setEndTime(end.toString());
-	            	tempCal.setStartTime(start.toString());
+	            	end_str = end.toString().substring(0, 19);
+	            	st_str = start.toString().substring(0, 19);	
+	            	end_str = end_str.replace('T', ' ' );
+	            	st_str = st_str.replace('T', ' ' );
+	            	tempCal.setEndTime(end_str);
+	            	tempCal.setStartTime(st_str);
 	            	tempCal.setEventDescription(event.getSummary());
 	            	tempCal.setEventName(event.getSummary());
 	            	cal.add(tempCal);
+	            	System.out.printf("%s (%s) end - (%s)\n", event.getSummary(), st_str,end);
 	            }
-	            System.out.printf("%s (%s) end - (%s)\n", event.getSummary(), start,end);
+	            
 	        }
-	        System.out.println("fishe somthing ");
 	    } 
-	    System.out.println("fishe somthing out ");
 	  final HttpRequestFactory requestFactory = httpTransport.createRequestFactory(credential);
 		// Make an authenticated request
 		final GenericUrl url = new GenericUrl(USER_INFO_URL);
@@ -176,9 +184,9 @@ public String CallSampleServlet_sub(
 		System.out.println(jsonIdentity);
 		HttpSession session = request.getSession();
 		session.setAttribute("email", user.getEmail());
-		String uuid = UUID.randomUUID().toString();
-		boolean check = calendarService.insertForGoogleCalendar(cal , user.getEmail(), uuid);
-		//if( check == true)
+		
+		boolean check = calendarService.insertForGoogleCalendar(cal , user.getEmail());
+		if( check == true)
 			System.out.println("done and signed");
 		return "success";
 		
