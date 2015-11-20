@@ -73,16 +73,28 @@ public class CalendarDao {
 	}
 	
 	
-		public boolean insertForGoogleCalendar(List<Calendar> calendar, String emailId, String uuid) {
+		public boolean insertForGoogleCalendar(List<Calendar> calendar, String emailId) {
 			try {
-				query = "INSERT INTO gcalendar " + "(uuid_google, event_name_google, email_id_google, event_description_google, start_date_google , end_date_google, start_time_google, end_time_google ) VALUES(?,?,?,?,?,?,?,?)";
+				
 				jdbcTemplate = new JdbcTemplate(dataSource);
-
+				int count = 0;
 				
 				
+				String uuid;
 				for (Calendar event : calendar )
-				{
-					jdbcTemplate.update(query, new Object[] { uuid, event.getEventName(), emailId, event.getEventDescription(), event.getStartTime(),event.getEndTime(),event.getStartTime(),event.getEndTime()});
+				{	
+					uuid = emailId + event.getStartTime()+event.getEventDescription();
+					query="Select count(*) from gcalendar where email_id_google=? and start_time_google=?";
+					System.out.println("out in the forloop "+ uuid);
+					count= jdbcTemplate.queryForObject(query, new Object[] {emailId, event.getStartTime()},Integer.class);
+					uuid = emailId + event.getStartTime();
+					if (count==0)
+					{
+						System.out.println("in the if in the forloop "+ uuid);
+						query  = "INSERT INTO gcalendar " + "(uuid_google, event_name_google, email_id_google, event_description_google, start_date_google , end_date_google, start_time_google, end_time_google ) VALUES(?,?,?,?,?,?,?,?)";
+						jdbcTemplate.update(query, new Object[] { uuid, event.getEventName(), emailId, event.getEventDescription(), event.getStartTime(),event.getEndTime(),event.getStartTime(),event.getEndTime()});
+					}
+				
 				}
 
 				/*query = "SELECT event_id from event_info where uuid=?";

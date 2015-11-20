@@ -20,9 +20,9 @@ public class CalendarService {
 		return calendarDao.insertForManualCalendar(start, end, calendar, emailId, uuid);
 	}
 	
-public boolean insertForGoogleCalendar(List<Calendar> calendar, String emailId, String uuid) {
+public boolean insertForGoogleCalendar(List<Calendar> calendar, String emailId) {
 		
-		return calendarDao.insertForGoogleCalendar(calendar, emailId, uuid);
+		return calendarDao.insertForGoogleCalendar(calendar, emailId);
 	}
 	
 	public boolean insertForGoogleCalendar(String[] start, String[] end, Calendar calendar, String emailId, String uuid) {
