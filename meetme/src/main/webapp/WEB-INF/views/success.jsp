@@ -188,6 +188,7 @@
 			<li><a href="#">My Calendar</a>
 			<li><a href="#">Import Calendars</a>
 			<li><a href="${pageContext.request.contextPath}/meetingTime">Get Meeting Time</a>
+			<li><a href="${pageContext.request.contextPath}/googleEvent">Event For MeetMe Users</a>
 		</ul>
 	</div>
 

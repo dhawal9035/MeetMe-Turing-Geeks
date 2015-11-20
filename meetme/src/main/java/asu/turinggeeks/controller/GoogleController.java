@@ -9,13 +9,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 //import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,6 +43,8 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.CalendarList;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
+import com.google.api.services.oauth2.Oauth2;
+import com.google.api.services.oauth2.model.Userinfoplus;
 
 import asu.turinggeeks.model.Calendar;
 import asu.turinggeeks.service.CalendarService;
@@ -72,8 +81,8 @@ public class GoogleController {
 	}
 
 @RequestMapping("/redirect")
-public @ResponseBody String CallSampleServlet_sub( 
-        HttpServletRequest request, HttpServletResponse response) throws IOException{
+public String CallSampleServlet_sub( 
+        HttpServletRequest request, HttpServletResponse response, @ModelAttribute("calendarInfo") Calendar calendar) throws IOException{
 	final String USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
 	HttpTransport httpTransport=new NetHttpTransport();
 	  JsonFactory jsonFactory=new JacksonFactory();
@@ -81,7 +90,6 @@ public @ResponseBody String CallSampleServlet_sub(
 	System.out.println("code "+ code);
 	
 	final Collection<String> SCOPE = Arrays.asList("https://www.googleapis.com/auth/userinfo.profile;https://www.googleapis.com/auth/userinfo.email;https://www.googleapis.com/auth/calendar".split(";"));
-	
 	
 	GoogleAuthorizationCodeFlow flow=new GoogleAuthorizationCodeFlow.Builder(httpTransport,jsonFactory,CLIENT_ID,CLIENT_SECRET,Collections.singleton(CalendarScopes.CALENDAR)).setAccessType("online").setApprovalPrompt("auto").build();
 	//GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport,JSON_FACTORY, CLIENT_ID, CLIENT_SECRET, SCOPE).build();
@@ -157,20 +165,22 @@ public @ResponseBody String CallSampleServlet_sub(
 
 		System.out.println(jsonIdentity);
 		
-/*		Oauth2 oauth2 = new Oauth2.Builder(new NetHttpTransport(), new JacksonFactory(), credential).setApplicationName(
+		Oauth2 oauth2 = new Oauth2.Builder(new NetHttpTransport(), new JacksonFactory(), credential).setApplicationName(
 		          "Oauth2").build();
 		 Userinfoplus userinfo = oauth2.userinfo().get().execute();
 		 System.out.println(userinfo.toPrettyString());
 		
 		 com.google.gson.Gson usergson = new com.google.gson.Gson();
 		 Userinfoplus user = usergson.fromJson(jsonIdentity, Userinfoplus.class);
-		 System.out.println(user.getFamilyName()+ "  "+ user.getGivenName()+ " "+ user.getEmail());*/
+		 System.out.println(user.getFamilyName()+ "  "+ user.getGivenName()+ " "+ user.getEmail());
 		System.out.println(jsonIdentity);
+		HttpSession session = request.getSession();
+		session.setAttribute("email", user.getEmail());
 		String uuid = UUID.randomUUID().toString();
-		boolean check = calendarService.insertForGoogleCalendar(cal , "praf1249@gmail.com", uuid);
+		boolean check = calendarService.insertForGoogleCalendar(cal , user.getEmail(), uuid);
 		//if( check == true)
 			System.out.println("done and signed");
-		return VIEW_INDEX;
+		return "success";
 		
 		
 	// Exchange authorization code for user credentials.
@@ -205,6 +215,54 @@ public @ResponseBody String CallSampleServlet_sub(
 	  //googleDriveClient=new Drive.Builder(httpTransport,jsonFactory,credential).build();
 	}
 
+	@RequestMapping(value="/googleEvent", method=RequestMethod.GET)
+	public String showCalendar(@ModelAttribute("calendar") Calendar calendar, Model model){
+		return "googleCreate";
+	}
+	
+	@RequestMapping(value="/googleCreateEvent", method=RequestMethod.POST)
+	public String retrieveTime(Model model, HttpServletRequest request, @ModelAttribute("calendarInfo") Calendar calendar){
+		/*Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String emailId= auth.getName();*/
+		String eventUuid = UUID.randomUUID().toString();
+		HttpSession session = request.getSession();
+		String emailId = (String) session.getAttribute("email");
+		System.out.println(emailId);
+		String counterString = (String) request.getParameter("counter");
+		if (!StringUtils.isEmpty(counterString)) {
+			int counter=Integer.parseInt(counterString);
+			String []startDate = new String[counter];
+			String []endDate = new String[counter];
+			for(int i=0; i < counter; i++){
+				startDate[i] = (String) request.getParameter("startDate"+i+"");
+				endDate[i] = (String) request.getParameter("endDate"+i+"");
+			}
+			/*int length = startDate.length;
+			String[] start = new String[length];
+			String[] end = new String[length];
+			for (int i = 0; i < length; i++) {
+				start[i] = startDate[i] + " " + startTime[i];
+				end[i] = endDate[i] + " " + endTime[i];
+			}*/
+			
+			boolean check = calendarService.insertForGoogleEvent(startDate, endDate, calendar, emailId, eventUuid);
+			if(check){
+				List<Calendar> startSlot = calendarService.getGoogleStartSlot(eventUuid);
+				List<Calendar> endSlot = calendarService.getGoogleEndSlot(eventUuid);
+				List<Calendar> userStartSlot = calendarService.getGoogleUserStartSlot(calendar);
+				List<Calendar> userEndSlot = calendarService.getGoogleUserEndSlot(calendar);
+				for(int i=0; i<startSlot.size();i++){
+					System.out.println("Start Date:"+startSlot.get(i).getStartTime());
+					System.out.println("End Date:"+endSlot.get(i).getEndTime());
+				}
+				return "success";
+			}
+			else
+				return "error";
+		}
+		else
+			return "error";
+	}
 	
 
 }

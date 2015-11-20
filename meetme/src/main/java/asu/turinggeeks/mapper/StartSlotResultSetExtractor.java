@@ -12,7 +12,7 @@ public class StartSlotResultSetExtractor implements ResultSetExtractor {
 
 	public Object extractData(ResultSet rs) throws SQLException {
 		Calendar calendar = new Calendar();
-		calendar.setStartTime(rs.getString("start_time"));
+		calendar.setStartTime(rs.getString("1"));
 		return calendar;
 		
 	}
