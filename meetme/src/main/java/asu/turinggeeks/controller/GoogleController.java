@@ -2,10 +2,12 @@ package asu.turinggeeks.controller;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,9 +36,8 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.CalendarList;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
-import com.google.api.services.oauth2.Oauth2;
-import com.google.api.services.oauth2.model.Userinfoplus;
 
+import asu.turinggeeks.model.Calendar;
 import asu.turinggeeks.service.CalendarService;
 
 @Controller
@@ -66,8 +67,8 @@ public class GoogleController {
 		//logger.debug("[welcome] counter : {}", counter);
 
 		// Spring uses InternalResourceViewResolver and return back index.jsp
-		return VIEW_INDEX;
-
+		return "success";
+ 
 	}
 
 @RequestMapping("/redirect")
@@ -108,7 +109,6 @@ public @ResponseBody String CallSampleServlet_sub(
 	            .build();	
 	    
 	    System.out.println("<h1>HELLO WORLD Prafull</h1>");
-
 	    DateTime now = new DateTime(System.currentTimeMillis());
 	    System.out.println("<h2>" + service.getApplicationName() + "</h2>");
 	    CalendarList feed = service.calendarList().list().execute();
@@ -121,9 +121,11 @@ public @ResponseBody String CallSampleServlet_sub(
 	            .execute();
 	    System.out.println("No upcoming events first found.");
 	    List<Event> items = events.getItems();
+	    List<Calendar> cal = new ArrayList<Calendar>();
 	    if (items.size() == 0) {
 	        System.out.println("No upcoming events found.");
 	    } else {
+	    	
 	    	System.out.println("Upcoming events");
 	        for (Event event : items) {
 	            DateTime start = event.getStart().getDateTime();
@@ -132,28 +134,42 @@ public @ResponseBody String CallSampleServlet_sub(
 	                start = event.getStart().getDateTime();
 	                end = event.getEnd().getDateTime(); 
 	            }
+	            if (start !=null){
+	            Calendar tempCal = new Calendar();
+	            	tempCal.setEndTime(end.toString());
+	            	tempCal.setStartTime(start.toString());
+	            	tempCal.setEventDescription(event.getSummary());
+	            	tempCal.setEventName(event.getSummary());
+	            	cal.add(tempCal);
+	            }
 	            System.out.printf("%s (%s) end - (%s)\n", event.getSummary(), start,end);
 	        }
+	        System.out.println("fishe somthing ");
 	    } 
+	    System.out.println("fishe somthing out ");
 	  final HttpRequestFactory requestFactory = httpTransport.createRequestFactory(credential);
 		// Make an authenticated request
 		final GenericUrl url = new GenericUrl(USER_INFO_URL);
 		final HttpRequest req = requestFactory.buildGetRequest(url);
 		req.getHeaders().setContentType("application/json");
 		final String jsonIdentity = req.execute().parseAsString();
-		final String jsonIdentit1y = req.execute().parseAsString();
+		//final String jsonIdentit1y = req.execute().parseAsString();
 
-		Oauth2 oauth2 = new Oauth2.Builder(new NetHttpTransport(), new JacksonFactory(), credential).setApplicationName(
+		System.out.println(jsonIdentity);
+		
+/*		Oauth2 oauth2 = new Oauth2.Builder(new NetHttpTransport(), new JacksonFactory(), credential).setApplicationName(
 		          "Oauth2").build();
 		 Userinfoplus userinfo = oauth2.userinfo().get().execute();
 		 System.out.println(userinfo.toPrettyString());
 		
 		 com.google.gson.Gson usergson = new com.google.gson.Gson();
 		 Userinfoplus user = usergson.fromJson(jsonIdentity, Userinfoplus.class);
-		 System.out.println(user.getFamilyName()+ "  "+ user.getGivenName()+ " "+ user.getEmail());
+		 System.out.println(user.getFamilyName()+ "  "+ user.getGivenName()+ " "+ user.getEmail());*/
 		System.out.println(jsonIdentity);
-		
-		//boolean check = calendarService.insertForManualCalendar(start, end, calendar, user.getEmail(), uuid);
+		String uuid = UUID.randomUUID().toString();
+		boolean check = calendarService.insertForGoogleCalendar(cal , "praf1249@gmail.com", uuid);
+		//if( check == true)
+			System.out.println("done and signed");
 		return VIEW_INDEX;
 		
 		

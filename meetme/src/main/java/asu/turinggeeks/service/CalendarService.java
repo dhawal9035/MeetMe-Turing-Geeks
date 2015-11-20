@@ -20,6 +20,11 @@ public class CalendarService {
 		return calendarDao.insertForManualCalendar(start, end, calendar, emailId, uuid);
 	}
 	
+public boolean insertForGoogleCalendar(List<Calendar> calendar, String emailId, String uuid) {
+		
+		return calendarDao.insertForGoogleCalendar(calendar, emailId, uuid);
+	}
+	
 	public boolean insertForGoogleCalendar(String[] start, String[] end, Calendar calendar, String emailId, String uuid) {
 		
 		return calendarDao.insertForGoogleCalendar(start, end, calendar, emailId, uuid);
@@ -47,8 +52,36 @@ public class CalendarService {
 		return calendarDao.checkUserType(guestMail,uuid);
 	}
 
-	public JSONObject fetchCalendarData(String emailId) {
-		return calendarDao.fetchCalendarData(emailId);
+	public String getUuid(String emailId) {
+		return calendarDao.getUuid(emailId);
+	}
+
+	public List<Calendar> getAllEvents(String emailId) {
+		return calendarDao.getAllEvents(emailId);
+	}
+
+	public List<Calendar> getStartSlot(int eventId) {
+		return calendarDao.getStartSlot(eventId);
+	}
+
+	public List<Calendar> getEndSlot(int eventId) {
+		return calendarDao.getEndSlot(eventId);
+	}
+
+	public List<Calendar> getRequiredSlot(String uuid) {
+		return calendarDao.getRequiredSlot(uuid);
+	}
+
+	public List<Calendar> getOptionalSlot(String uuid) {
+		return calendarDao.getOptionalSlot(uuid);
+	}
+
+	public int getRequiredCounter(String uuid) {
+		return calendarDao.getRequiredCounter(uuid);
+	}
+
+	public int getResponseCounter(String uuid) {
+		return calendarDao.getResponseCounter(uuid);
 	}
 	
 }

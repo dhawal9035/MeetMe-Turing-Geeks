@@ -16,10 +16,6 @@ public class CalendarResultSetExtractor implements ResultSetExtractor {
 		calendar.setEventDescription(rs.getString("event_description"));
 		calendar.setStartTime(rs.getString("start_time"));
 		calendar.setEndTime(rs.getString("end_time"));
-		System.out.println(calendar.getEventName());
-		System.out.println(calendar.getEventDescription());
-		System.out.println(calendar.getStartTime());
-		System.out.println(calendar.getEndTime());
 		return calendar;
 		
 	}
