@@ -1,17 +1,24 @@
 package asu.turinggeeks.controller;
 
-import org.scribe.model.*;
+import static asu.turinggeeks.configuration.SessionAttributes.ATTR_OAUTH_ACCESS_TOKEN;
+import static asu.turinggeeks.configuration.SessionAttributes.ATTR_OAUTH_REQUEST_TOKEN;
+import static org.springframework.web.context.request.RequestAttributes.SCOPE_SESSION;
+
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Response;
+import org.scribe.model.Token;
+import org.scribe.model.Verb;
+import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
-import org.springframework.beans.factory.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import static org.springframework.web.context.request.RequestAttributes.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
+
 import asu.turinggeeks.configuration.OAuthServiceProvider;
-import static asu.turinggeeks.configuration.SessionAttributes.*;
 
 @Controller
 public class FacebookController {
