@@ -108,10 +108,10 @@ public class CalendarController {
 	}
 
 	@RequestMapping(value = "/algorithm", method = RequestMethod.GET)
-	public String triggerAlgorithm(String[] slots_timings, String[] reqResponseStr, String[] optResponseStr ) {
+	public String triggerAlgorithm(List<Calendar> startSlot, List<Calendar> endSlot, List<Calendar> requiredSlot, List<Calendar> optionalSlot ) {
 
 		
-		String[] slotsTimingStart= {"2014/04/23 00:00:00","2014/04/23 2:00:00","2014/04/23 12:00:00"};
+		/*String[] slotsTimingStart= {"2014/04/23 00:00:00","2014/04/23 2:00:00","2014/04/23 12:00:00"};
 		String[] slotsTimingEnd= {
 				"2014/04/23 01:00:00",
 				"2014/04/23 3:00:00",
@@ -127,25 +127,26 @@ public class CalendarController {
 				"2014/04/23 00:00:00,2014/04/23 01:00:00",
 				"2014/04/23 2:00:00,2014/04/23 3:00:00",
 				"2014/04/23 2:00:00,2014/04/23 3:00:00",
-				"2014/04/23 12:00:00,2014/04/23 14:00:00"};
+				"2014/04/23 12:00:00,2014/04/23 14:00:00"};*/
 		HashMap<String, Integer> hash = new HashMap<String, Integer>();
-		Integer count = 0;
 		String slot = "";
-		for(int i =0;i<slotsTimingEnd.length;i++)
+		for(int i =0;i<endSlot.size();i++)
 		{
-			slot = slotsTimingStart[i]+","+slotsTimingEnd[i];
+			slot = startSlot.get(i).getStartTime()+","+endSlot.get(i).getEndTime();
 			hash.put( slot , new Integer(0));
 		}
 		
-		for(String slotTemp: reqResponse )
+		Integer count = 0;
+		for(Calendar slotTemp_var: requiredSlot )
 		{
-				count = hash.get(slotTemp) ;
-				if(count!=null)
+				String slotTemp = slotTemp_var.getRequiredTime();
+				if(hash.get(slotTemp) !=null)
 					hash.put(slotTemp, ++count);
 				System.out.println(slotTemp.split(","));
 		}
-		for(String slotTemp: optResponse )
+		for(Calendar slotTemp_var: optionalSlot )
 		{
+				String slotTemp = slotTemp_var.getOptionalTime();
 				count = hash.get(slotTemp) ;
 				if (count!=null)
 					hash.put(slotTemp, ++count);
@@ -160,7 +161,7 @@ public class CalendarController {
 			temp = map.getKey();
 			slotTimes = temp.split(",");
 			dt2 = LocalDateTime.parse(slotTimes[0], 
-			        DateTimeFormat.forPattern("yyyy/MM/dd HH:mm:ss"));
+			        DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
 			if(dt2.getHourOfDay()<20 && dt2.getHourOfDay()>9)
 			{
 				int i = hash.get(temp);
@@ -177,6 +178,7 @@ public class CalendarController {
 		System.out.println(ctr.toString());
 
 		return "success";
+
 		
 	}
 
@@ -220,11 +222,13 @@ public class CalendarController {
 		List<Calendar> endSlot = calendarService.getEndSlot(eventId);
 		List<Calendar> requiredSlot = calendarService.getRequiredSlot(uuid);
 		List<Calendar> optionalSlot = calendarService.getOptionalSlot(uuid);
+
 		int responseCounter = calendarService.getResponseCounter(uuid);
 		int requiredCounter = calendarService.getRequiredCounter(uuid);
 		
 		if(responseCounter == requiredCounter){
 			System.out.println("Majai Gai "+requiredCounter);
+			triggerAlgorithm(startSlot, endSlot,requiredSlot, optionalSlot);
 		}
 		else{             
 			System.out.println("Na Majai "+responseCounter);
