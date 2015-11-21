@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -225,19 +226,22 @@ public class CalendarController {
 		if(responseCounter == requiredCounter){
 			System.out.println("Majai Gai "+requiredCounter);
 		}
-		else{
+		else{             
 			System.out.println("Na Majai "+responseCounter);
 		}
 		
 		return "meetingTime";
 	}
 	
+	
+	
+	
 	@RequestMapping(value="/calendarFetch", method=RequestMethod.GET)
 	public String fetchData(Model model,@ModelAttribute("calendarInfo") Calendar calendar){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String emailId= auth.getName();
 		//You may have to create a JSON Object. Change the return type of the method if returning a JSON obj
-		JSONObject data = calendarService.fetchCalendarData(emailId);
+		JSONArray data = calendarService.fetchCalendarData(emailId);
 		model.addAttribute(data);
 		return "success";
 	}
