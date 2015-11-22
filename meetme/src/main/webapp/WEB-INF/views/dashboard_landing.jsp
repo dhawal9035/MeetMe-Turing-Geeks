@@ -649,7 +649,7 @@
 				</div>
 				
 				<div class="modal-body">
-					<form:form id="calendarSubmit" role="form" method="POST" action="/meetme/calendarEvent" commandName="calendarInfo" class="form-horizontal">
+					<form:form id="calendarSubmit" role="form" method="POST" action="/meetme/calendarEvent" commandName="calendar" class="form-horizontal">
 	<div class="form-group">
 		<label class="control-label col-sm-2" for="event-name">Event Name:</label>
 			<div class="col-sm-10">

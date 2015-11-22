@@ -1,5 +1,7 @@
 package asu.turinggeeks.service;
 
+import java.util.List;
+
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -88,5 +90,27 @@ public class MailService {
 			e.printStackTrace();
 			System.out.println("Error Caused while Sending the mail" + e.getMessage());
 		}
+	}
+
+	public void sendPreferredTime(String emailId, String requiredPeople, String optionalPeople, List<String> reverseOutput) {
+		String all = requiredPeople+optionalPeople;
+		mimeMessage = this.mailSender.createMimeMessage();
+		try{
+			InternetAddress[] inviteMails = InternetAddress.parse(all);
+			mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+			mimeMessageHelper.setBcc(inviteMails);
+			mimeMessage.setSubject("Meeting Times");
+			mimeMessageHelper.setFrom("meetmetg@gmail.com");
+			mimeMessageHelper.setText("<html><body>Hi,<br/><br/> Below are the meeting time as per their rank.</br>"
+					+ ""
+					+ "<a href='http://localhost:8080/meetme/viewTimings/> Click here</a>. "
+					+ "<br/><br/>Thanks and Best Regards,<br/> MeetMe Team</body></html>",true);
+			mailSender.send(mimeMessage);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println("Error Caused while Sending the mail" + e.getMessage());
+		}
+		
 	}
 }

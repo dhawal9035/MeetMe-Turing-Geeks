@@ -12,7 +12,7 @@ public class EndSlotResultSetExtractor implements ResultSetExtractor {
 
 	public Object extractData(ResultSet rs) throws SQLException {
 		Calendar calendar = new Calendar();
-		calendar.setEndTime(rs.getString("1"));
+		calendar.setEndTime(rs.getString(1));
 		return calendar;
 		
 	}

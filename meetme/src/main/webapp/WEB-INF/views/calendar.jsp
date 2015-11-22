@@ -141,7 +141,7 @@ $(document).ready(function(){
 		</div>
 		<div>
 		<ul class="nav navbar-nav">
-			<li class="active"><a href="${pageContext.request.contextPath}/dashboard_landing">Home</a>
+			<li class="active"><a href="${pageContext.request.contextPath}/success">Home</a>
 			<li><a href="#">Contact Us</a>
 			<li><a href="#">Settings</a>
 			<li><a href="#">Profile</a>
@@ -149,6 +149,7 @@ $(document).ready(function(){
 				<span class="glyphicon  glyphicon-user" style="vertical-align:middle, horizontal-align:right" aria-hidden="true">
 				</span>
 			</button>
+			<li style="padding-left: 770px;"><a href = "j_spring_security_logout"> Logout </a></li>
 		</ul>
 		</div>
 	</div>
@@ -162,9 +163,8 @@ $(document).ready(function(){
 		<ul class="nav nav-pills nav-stacked" >
 			<li><a href="${pageContext.request.contextPath}/schedule">Schedule</a>
 			<li class="active"><a href="${pageContext.request.contextPath}/calendar">Manual Schedule</a>
-			<li><a href="#">My Calendar</a>
-			<li><a href="#">Import Calendars</a>
 			<li><a href="${pageContext.request.contextPath}/meetingTime">Get Meeting Time</a>
+			<li><a href="${pageContext.request.contextPath}/googleEvent">Event For MeetMe Users</a>
 		</ul>
 	</div>
 <div class="container">

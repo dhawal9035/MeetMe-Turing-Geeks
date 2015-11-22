@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.google.common.collect.Lists;
+
 import asu.turinggeeks.model.Calendar;
 import asu.turinggeeks.service.CalendarService;
 import asu.turinggeeks.service.MailService;
@@ -43,22 +45,23 @@ public class CalendarController {
 	}
 	
 	@RequestMapping(value="/calendarEvent", method=RequestMethod.GET)
-	public String calendarInfo(@ModelAttribute("calendarInfo") Calendar calendar, Model model) {
+	public String calendar(@ModelAttribute("calendar") Calendar calendar, Model model) {
 		return "success";
 	}
 	
 	@RequestMapping(value="/dashboard_landing", method=RequestMethod.GET)
-	public String calendarEvent(@ModelAttribute("calendarInfo") Calendar calendar, Model model) {
+	public String calendarEvent(@ModelAttribute("calendar") Calendar calendar, Model model) {
 		return "dashboard_landing";
 	}
 	
 	@RequestMapping(value="/schedule")
-	public String goToSchedule(@ModelAttribute("calendarInfo") Calendar calendar, Model model) {
+	public String goToSchedule(@ModelAttribute("calendar") Calendar calendar, Model model) {
 		return "success";
 	}
 	
 	@RequestMapping(value="/manualCalendar", method=RequestMethod.POST)
 	public String addCalendar(@ModelAttribute("calendar") Calendar calendar, Model model, HttpServletRequest request){
+		try{
 		String uuid = UUID.randomUUID().toString();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String emailId= auth.getName();
@@ -90,24 +93,34 @@ public class CalendarController {
 				return "success";
 			}
 			else
-				return "error";
+				return "errorPage";
 		}
 		else
-			return "error";
-		
+			return "errorPage";
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return "errorPage";
+		}
 	}
 	
 	@RequestMapping(value="/submitTiming/{uuid}", method=RequestMethod.GET)
 	public String userResponse(@PathVariable String uuid, Model model){
+		try{
 		int eventId = calendarService.getEventId(uuid);
 		model.addAttribute(uuid);
 		List<Calendar> probableTimings = calendarService.getAllEventDetails(eventId);
 		model.addAttribute("probableTimings", probableTimings);
 		return "eventResponse";
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return "errorPage";
+		}
 	}
 
 	@RequestMapping(value = "/algorithm", method = RequestMethod.GET)
-	public String triggerAlgorithm(List<Calendar> startSlot, List<Calendar> endSlot, List<Calendar> requiredSlot, List<Calendar> optionalSlot ) {
+	public List<String> triggerAlgorithm(List<Calendar> startSlot, List<Calendar> endSlot, List<Calendar> requiredSlot, List<Calendar> optionalSlot ) {
 
 		
 		/*String[] slotsTimingStart= {"2014/04/23 00:00:00","2014/04/23 2:00:00","2014/04/23 12:00:00"};
@@ -135,10 +148,19 @@ public class CalendarController {
 			hash.put( slot , new Integer(0));
 		}
 		
+		for(int i=0;i<optionalSlot.size();i++){
+			System.out.println("Optional Slot"+optionalSlot.get(i).getOptionalTime());
+		}
+		for(int i=0;i<requiredSlot.size();i++){
+			System.out.println("Required Slot"+requiredSlot.get(i).getRequiredTime());
+		}
+		
 		Integer count = 0;
 		for(Calendar slotTemp_var: requiredSlot )
 		{
+				count = 0;
 				String slotTemp = slotTemp_var.getRequiredTime();
+				count = hash.get(slotTemp) ;
 				if(hash.get(slotTemp) !=null)
 					hash.put(slotTemp, ++count);
 				System.out.println(slotTemp.split(","));
@@ -151,6 +173,8 @@ public class CalendarController {
 					hash.put(slotTemp, ++count);
 		}
 		
+		System.out.println(hash.toString());
+		
 		String[] slotTimes = new String[2];
 		String temp = new String();
 		LocalDateTime dt2;
@@ -161,7 +185,7 @@ public class CalendarController {
 			slotTimes = temp.split(",");
 			dt2 = LocalDateTime.parse(slotTimes[0], 
 			        DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
-			if(dt2.getHourOfDay()<20 && dt2.getHourOfDay()>9)
+			if(dt2.getHourOfDay()<=20 && dt2.getHourOfDay()>=9)
 			{
 				int i = hash.get(temp);
 				hash.put(temp, ++i );
@@ -173,17 +197,21 @@ public class CalendarController {
 		ArrayList<Integer> ctr = new ArrayList<Integer>();
 		ctr.addAll(hash.values());
 		Collections.sort(ctr);
+		List<String> output = new ArrayList<String>();
+		for (Map.Entry< Integer,String> map : tMap.entrySet())
+			output.add(map.getValue());
 		
+		System.out.println(output);
 		System.out.println(ctr.toString());
 
-		return "success";
-
+		return output;
 		
 	}
 
 	
 	@RequestMapping(value="userResponse", method=RequestMethod.POST)
 	public String saveResponse(Model model, HttpServletRequest request){
+		try{
 		String guestMail=request.getParameter("email");
 		String[] checkedTimings = request.getParameterValues("timing");
 		String uuid = request.getParameter("uuid");
@@ -198,6 +226,11 @@ public class CalendarController {
 			return "submitTiming/"+uuid+"";
 		}
 		return "response";
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return "errorPage";
+		}
 	}
 	
 	@RequestMapping(value="meetingTime", method = RequestMethod.GET)
@@ -221,23 +254,41 @@ public class CalendarController {
 		List<Calendar> endSlot = calendarService.getEndSlot(eventId);
 		List<Calendar> requiredSlot = calendarService.getRequiredSlot(uuid);
 		List<Calendar> optionalSlot = calendarService.getOptionalSlot(uuid);
+		for(int i=0;i<optionalSlot.size();i++){
+			System.out.println("Optional Slot"+optionalSlot.get(i).getOptionalTime());
+		}
+		for(int i=0;i<requiredSlot.size();i++){
+			System.out.println("Required Slot"+requiredSlot.get(i).getRequiredTime());
+		}
 
 		int responseCounter = calendarService.getResponseCounter(uuid);
 		int requiredCounter = calendarService.getRequiredCounter(uuid);
 		
 		if(responseCounter == requiredCounter){
 			System.out.println("Majai Gai "+requiredCounter);
-			triggerAlgorithm(startSlot, endSlot,requiredSlot, optionalSlot);
+			List<String> output = new ArrayList<String>();
+			output = triggerAlgorithm(startSlot, endSlot,requiredSlot, optionalSlot);
+			List<String> reverseOutput = new ArrayList<String>(); 
+			reverseOutput =	Lists.reverse(output);
+			String requiredPeople = calendarService.getRequiredPeople(uuid);
+			String optionalPeople = calendarService.getOptionalPeople(uuid);
+			mailService.sendPreferredTime(emailId,requiredPeople,optionalPeople, reverseOutput);
+			model.addAttribute("reverseOutput",reverseOutput);
+			return "preferredTime";
 		}
 		else{
 			System.out.println("Na Majai "+responseCounter);
+			List <Calendar> allEvents = calendarService.getAllEvents(emailId);
+			model.addAttribute("allEvents",allEvents);
+			model.addAttribute("error","error");
+			return "meetingTime";
 		}
 		
-		return "meetingTime";
+		
 	}
 	
 	@RequestMapping(value="/calendarFetch", method=RequestMethod.GET)
-	public String fetchData(Model model,@ModelAttribute("calendarInfo") Calendar calendar){
+	public String fetchData(Model model,@ModelAttribute("calendar") Calendar calendar){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String emailId= auth.getName();
 		//You may have to create a JSON Object. Change the return type of the method if returning a JSON obj
@@ -245,4 +296,23 @@ public class CalendarController {
 		model.addAttribute(data);
 		return "success";
 	}
+	
+	@RequestMapping(value="/submitDB", method= RequestMethod.POST)
+    public String submitDB (@ModelAttribute("calendar") Calendar calendar) {
+        // add the event details in a string and then insert into the database!
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String emailId= auth.getName();
+		String uuid = UUID.randomUUID().toString();
+        String eventName = calendar.getEventName();
+        System.out.println(calendar.getGuestRequiredEmail());
+        System.out.println(calendar.getGuestOptionalEmail());
+        String errormsg = "Failed to store event info";
+        System.out.println(eventName);
+        if(calendarService.insertEvent(calendar, emailId, uuid)){
+        //finally return event name
+        return eventName;       
+        }
+        else        	
+            return errormsg;
+    }
 }

@@ -35,10 +35,10 @@ public class LoginController {
 	
 	@RequestMapping(value="/loginSuccess", method=RequestMethod.GET)
 	public String register(Model model){
-		Calendar calendarInfo = new Calendar();
+		Calendar calendar = new Calendar();
 		UserInfo userForm = new UserInfo();
 		model.addAttribute("userForm", userForm);
-		model.addAttribute("calendarInfo", calendarInfo);
+		model.addAttribute("calendar", calendar);
 		return "success";
 	}
 	
@@ -110,7 +110,7 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value="/success")
-	public String redirectToSuccess(Model model){
+	public String redirectToSuccess(Model model, @ModelAttribute("calendar") Calendar calendar){
 		return "success";
 	}
 }

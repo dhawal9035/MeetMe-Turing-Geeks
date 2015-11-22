@@ -86,7 +86,14 @@
 					<button type="button"
 						class="btn btn-link btn-lg col-sm-2 " data-toggle="modal"
 						data-target="#ForgotPasswordModal">Forgot Password?</button>
+						
 				</div>
+				<div class="col-lg-13 col-right">
+					<button type="button"
+						class="btn btn-link btn-info btn-lg col-sm-8 " data-toggle="modal"
+						data-target="#SignUpModal">Need Account?</button>
+				</div>
+				
 			</div>
 
 			<div class="row row-centered">
@@ -94,14 +101,12 @@
 					<a href="<c:url value="/facebook" />"><img
 						src="${pageContext.request.contextPath}/resources/images/facebook-login.png" /></a>
 
-					<a href="<c:url value="/google" />">Login with Google</a>
 					<%-- <a href="<c:url value="/linkedin" />">Login with LinkedIn</a> --%>
 					<!-- <input type="image" id="saveForm" src="../images/facebook.png" alt="Submit Form"> -->
 				</div>
 				<div class="col-lg-2 col-right">
-					<button type="button"
-						class="btn btn-link btn-info btn-lg col-sm-2 " data-toggle="modal"
-						data-target="#SignUpModal">Need Account?</button>
+				<a href="<c:url value="/google" />"><img
+						src="${pageContext.request.contextPath}/resources/images/google.png" /></a>
 				</div>
 			</div>
 		</form>

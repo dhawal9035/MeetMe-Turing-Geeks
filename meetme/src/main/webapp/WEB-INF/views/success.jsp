@@ -172,6 +172,7 @@
 					<span class="glyphicon  glyphicon-user" style="vertical-align:middle, horizontal-align:right" aria-hidden="true">
 					</span>
 				</button>
+				<li style="padding-left: 770px;"><a href = "j_spring_security_logout"> Logout </a></li>	
 			</ul>
 			</div>
 		</div>
@@ -185,8 +186,6 @@
 		<ul class="nav nav-pills nav-stacked" >
 			<li class="active"><a href="#">Schedule</a>
 			<li><a href="${pageContext.request.contextPath}/calendar">Manual Schedule</a>
-			<li><a href="#">My Calendar</a>
-			<li><a href="#">Import Calendars</a>
 			<li><a href="${pageContext.request.contextPath}/meetingTime">Get Meeting Time</a>
 			<li><a href="${pageContext.request.contextPath}/googleEvent">Event For MeetMe Users</a>
 		</ul>
@@ -200,7 +199,7 @@
 				</div>
 				
 				<div class="modal-body">
-					<form:form id="calendarSubmit" role="form" method="POST" action="/meetme/calendarEvent" commandName="calendarInfo" class="form-horizontal">
+					<form:form id="calendarSubmit" role="form" method="POST" action="/meetme/calendarEvent" commandName="calendar" class="form-horizontal">
 	<div class="form-group">
 		<label class="control-label col-sm-2" for="event-name">Event Name:</label>
 			<div class="col-sm-10">

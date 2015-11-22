@@ -137,7 +137,7 @@ $(document).ready(function(){
 		</div>
 		<div>
 		<ul class="nav navbar-nav">
-			<li class="active"><a href="${pageContext.request.contextPath}/dashboard_landing">Home</a>
+			<li class="active"><a href="${pageContext.request.contextPath}/success">Home</a>
 			<li><a href="#">Contact Us</a>
 			<li><a href="#">Settings</a>
 			<li><a href="#">Profile</a>
@@ -145,6 +145,7 @@ $(document).ready(function(){
 				<span class="glyphicon  glyphicon-user" style="vertical-align:middle, horizontal-align:right" aria-hidden="true">
 				</span>
 			</button>
+			<li style="padding-left: 770px;"><a href = "j_spring_security_logout"> Logout </a></li>
 		</ul>
 		</div>
 	</div>
@@ -158,8 +159,6 @@ $(document).ready(function(){
 		<ul class="nav nav-pills nav-stacked" >
 			<li><a href="${pageContext.request.contextPath}/schedule">Schedule</a>
 			<li><a href="${pageContext.request.contextPath}/calendar">Manual Schedule</a>
-			<li><a href="#">My Calendar</a>
-			<li><a href="#">Import Calendars</a>
 			<li><a href="${pageContext.request.contextPath}/meetingTime">Get Meeting Time</a>
 			<li class="active"><a href="${pageContext.request.contextPath}/googleEvent">Event For MeetMe Users</a>
 		</ul>
@@ -180,8 +179,8 @@ $(document).ready(function(){
 			</div>
 	</div>
 	<div class="row" style="padding-top: 25px; padding-bottom: 25px;">
-		<label class="control-label col-sm-2" for="event-name" style="width: 340px;padding-left: 50px;">Time Slots:</label>
-			<div class="col-md-8" style="padding-left: 0px;">
+		<label class="control-label col-sm-2" for="event-name" style="width: 250px;padding-left: 0px;">Time Slots:</label>
+			<div class="col-md-8" style="padding-left: 90px;width: 555px;">
 				<div id='TextBoxesGroup'>
 					<div id="Div0">
 						<div id="datePair" class="datePair">
@@ -192,12 +191,6 @@ $(document).ready(function(){
 					<input name="counter" type="hidden" id="counter" value="1" />
 				</div> 
 			</div>					
-			<div class="col-md-1" style="padding-top: 10px;">
-	    		<input type='button' value='Add More' id='addButton' class="btn btn-success">
-	    	</div>
-	    	<div class="col-md-1" style="padding-top: 10px;"> 
-				<input type='button' value='Remove' id='removeButton' class="btn btn-danger">
-			</div>
 	</div>
 	<div class="form-group">
 		<label class="control-label col-sm-2" for="event-name" style="width: 290px;">Required People: </label>

@@ -8,13 +8,11 @@
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<title>Meeting Time</title>
+<title>Time Slots</title>
 <script type="text/javascript">
-
-	if ($(this).attr('error')) {
-	    alert('Exists!');
-	}
-	
+$(document).ready(function(){
+	alert('We have sent an email to each participant with these timings!');	
+});
 </script>
 </head>
 <body>
@@ -55,27 +53,20 @@
 	<table class="table table-striped" style="width: 750px;" align="left">
 			<thead>
 				<tr>
-					<th>Event Id</th>
-					<th>Event Name</th>
-					<th>Event Description</th>
+					<th>Rank</th>
+					<th>Timings(Note that Rank 1 is the preferred time for the meeting.)</th>
+					
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="request" items="${allEvents}">
+				<c:set var="count" value="0" scope="page" />
+				<c:forEach var="request" items="${reverseOutput}" varStatus="theCount">
 					<tr>
 						<td>
-							<a href="${pageContext.request.contextPath}/getTime/?eventId=${request.eventId}&uuid=${request.uuid}"><label><c:out value="${request.eventId}"></c:out></label>
-								<%-- <input type="hidden" name="time" value="${request.eventId}"> --%>
-							</a>
+ 							<h4 class="text-primary">${theCount.count}</h4>
 						</td>
 						<td>
-							<label><c:out value="${request.eventName}"></c:out></label>
-							<%-- <input type="hidden" name="${request.eventName}"> --%>
-						</td>
-						<td>
-							<label><c:out value="${request.eventDescription}"></c:out></label>
-							<%-- <input type="hidden" name="${request.eventDescription}">
-							<input type="hidden" name="${request.uuid}"> --%>
+							<h4 class="text-primary">${request}</h4>
 						</td>
 							
 					</tr>

@@ -9,14 +9,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 //import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -82,7 +79,7 @@ public class GoogleController {
 
 @RequestMapping("/redirect")
 public String CallSampleServlet_sub( 
-        HttpServletRequest request, HttpServletResponse response, @ModelAttribute("calendarInfo") Calendar calendar) throws IOException{
+        HttpServletRequest request, HttpServletResponse response, @ModelAttribute("calendar") Calendar calendar) throws IOException{
 	final String USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
 	HttpTransport httpTransport=new NetHttpTransport();
 	  JsonFactory jsonFactory=new JacksonFactory();
@@ -229,7 +226,7 @@ public String CallSampleServlet_sub(
 	}
 	
 	@RequestMapping(value="/googleCreateEvent", method=RequestMethod.POST)
-	public String retrieveTime(Model model, HttpServletRequest request, @ModelAttribute("calendarInfo") Calendar calendar){
+	public String retrieveTime(Model model, HttpServletRequest request, @ModelAttribute("calendar") Calendar calendar){
 		/*Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String emailId= auth.getName();*/
 		String eventUuid = UUID.randomUUID().toString();
@@ -255,14 +252,8 @@ public String CallSampleServlet_sub(
 			
 			boolean check = calendarService.insertForGoogleEvent(startDate, endDate, calendar, emailId, eventUuid);
 			if(check){
-				List<Calendar> startSlot = calendarService.getGoogleStartSlot(eventUuid);
-				List<Calendar> endSlot = calendarService.getGoogleEndSlot(eventUuid);
 				List<Calendar> userStartSlot = calendarService.getGoogleUserStartSlot(calendar);
 				List<Calendar> userEndSlot = calendarService.getGoogleUserEndSlot(calendar);
-				for(int i=0; i<startSlot.size();i++){
-					System.out.println("Start Date:"+startSlot.get(i).getStartTime());
-					System.out.println("End Date:"+endSlot.get(i).getEndTime());
-				}
 				return "success";
 			}
 			else
