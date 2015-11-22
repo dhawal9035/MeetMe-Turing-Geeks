@@ -27,21 +27,54 @@
 		  var d = date.getDate();
 		  var m = date.getMonth();
 		  var y = date.getFullYear();
+		  alert("am here");
 		  
 		  $('#calendar').fullCalendar({
-			  
-			events: function(start, end, callback) {
+			header: {
+			  left: 'prev,next today',
+			  center: 'title',
+			  right: 'month,agendaWeek,agendaDay'
+			},
+	
+			 events: '${pageContext.request.contextPath}/calendarFetch',
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			/* eventSources: [
+
+			               // your event source
+			               {
+			                   url: '${pageContext.request.contextPath}/calendarFetch', // use the `url` property
+			                   color: 'yellow',    // an option!
+			                   textColor: 'black'  // an option!
+			               }
+
+			               // any other sources...
+
+			           ], */
+			
+			
+/* 			events: function(start, end, timezone, callback) {
 		        $.ajax({
-		            url: '${pageContext.request.contextPath}/calendarFetch',
+		      url: '${pageContext.request.contextPath}/calendarFetch',
 		            dataType: "json",
+
 		            data: {
 		                start: start.unix(),
 		                end: end.unix()
 		            },
 		            success: function(doc) {
+		            	alert("data111");
 		                var events = [];
 		                $(doc).find('event').each(function() {
+		                	alert("data1112222");
 		                    events.push({
+		                    	
 		                        title: $(this).attr('title'),
 		                        start: $(this).attr('start') // will be parsed
 		                    });
@@ -49,12 +82,14 @@
 		                callback(events);
 		            }
 		        });
-		    },
-			header: {
-			  left: 'prev,next today',
-			  center: 'title',
-			  right: 'month,agendaWeek,agendaDay'
-			},
+		    } */
+			
+		    
+
+		    
+		    
+		    
+		    
 			selectable: true,
 			selectHelper: true,
 			select: function(start, end, allDay) {
@@ -103,52 +138,7 @@
 			    });
 			},
 			editable: true,
-			events: [
-			  {
-				title: '',
-				start: new Date(y, m, 1)
-			  },
-			  {
-				title: '',
-				start: new Date(y, m, d-5),
-				end: new Date(y, m, d-2)
-			  },
-			  {
-				id: 999,
-				title: '',
-				start: new Date(y, m, d-3, 16, 0),
-				allDay: false
-			  },
-			  {
-				id: 999,
-				title: '',
-				start: new Date(y, m, d+4, 16, 0),
-				allDay: false
-			  },
-			  {
-				title: '',
-				start: new Date(y, m, d, 10, 30),
-				allDay: false
-			  },
-			  {
-				title: '',
-				start: new Date(y, m, d, 12, 0),
-				end: new Date(y, m, d, 14, 0),
-				allDay: false
-			  },
-			  {
-				title: '',
-				start: new Date(y, m, d+1, 19, 0),
-				end: new Date(y, m, d+1, 22, 30),
-				allDay: false
-			  },
-			  {
-				title: '',
-				start: new Date(y, m, 28),
-				end: new Date(y, m, 29),
-				url: 'http://google.com/'
-			  }
-			]
+
 		  });
 	});
     </script>
