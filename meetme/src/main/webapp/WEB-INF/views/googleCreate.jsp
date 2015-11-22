@@ -116,7 +116,7 @@ $(document).ready(function(){
     		 url:frm.attr('action'),
     		 data:frm.serialize(),
     		 success: function(data){
-    			 top.location.href = "${pageContext.request.contextPath}/success";
+    			 top.location.href = "${pageContext.request.contextPath}/preferredTime";
     			 alert('Email has been sent to you and all the users with the preferred and probable meeting times.');
     		 }
     	 	 /* /* error: function(data){
@@ -145,7 +145,7 @@ $(document).ready(function(){
 				<span class="glyphicon  glyphicon-user" style="vertical-align:middle, horizontal-align:right" aria-hidden="true">
 				</span>
 			</button>
-			<li style="padding-left: 770px;"><a href = "j_spring_security_logout"> Logout </a></li>
+			<li><a href = "j_spring_security_logout"> Logout </a></li>
 		</ul>
 		</div>
 	</div>
@@ -157,7 +157,7 @@ $(document).ready(function(){
 
 	<div class="col-md-2" style=" padding-top: 20px;">
 		<ul class="nav nav-pills nav-stacked" >
-			<li><a href="${pageContext.request.contextPath}/schedule">Schedule</a>
+			<li><a href="${pageContext.request.contextPath}/schedule">My Calendar</a>
 			<li><a href="${pageContext.request.contextPath}/calendar">Manual Schedule</a>
 			<li><a href="${pageContext.request.contextPath}/meetingTime">Get Meeting Time</a>
 			<li class="active"><a href="${pageContext.request.contextPath}/googleEvent">Event For MeetMe Users</a>

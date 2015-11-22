@@ -31,7 +31,7 @@ $(document).ready(function(){
 				<span class="glyphicon  glyphicon-user" style="vertical-align:middle, horizontal-align:right" aria-hidden="true">
 				</span>
 			</button>
-			<li style="padding-left: 770px;"><a href = "j_spring_security_logout"> Logout </a></li>
+			<li><a href = "j_spring_security_logout"> Logout </a></li>
 		</ul>
 		</div>
 	</div>
@@ -43,7 +43,7 @@ $(document).ready(function(){
 
 	<div class="col-md-2" style=" padding-top: 20px;">
 		<ul class="nav nav-pills nav-stacked" >
-			<li><a href="${pageContext.request.contextPath}/schedule">Schedule</a>
+			<li><a href="${pageContext.request.contextPath}/schedule">My Calendar</a>
 			<li><a href="${pageContext.request.contextPath}/calendar">Manual Schedule</a>
 			<li class="active"><a href="${pageContext.request.contextPath}/meetingTime">Get Meeting Time</a>
 			<li><a href="${pageContext.request.contextPath}/googleEvent">Event For MeetMe Users</a>
@@ -54,7 +54,7 @@ $(document).ready(function(){
 			<thead>
 				<tr>
 					<th>Rank</th>
-					<th>Timings(Note that Rank 1 is the preferred time for the meeting.)</th>
+					<th>Timings(Note that Rank 1 is the preferred time/slot for the meeting.)</th>
 					
 				</tr>
 			</thead>

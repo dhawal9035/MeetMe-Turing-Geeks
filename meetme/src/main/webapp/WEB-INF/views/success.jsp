@@ -21,34 +21,68 @@
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/stylesheets/fullcalendar.min.css" />
 	
 	<script type="text/javascript">
-	$(document).ready(function(){
-		var doc1 = [{"id":"1","title":"New Event","start":"2015-11-01T00:01:00+05:30","end":"2015-01-14T00:01:00+05:30","allDay":false}]
+	 $(document).ready(function(){ 
+		 var doc1 = [{"id":"1","title":"New Event","start":"2015-11-01T00:01:00+05:30","end":"2015-01-14T00:01:00+05:30","allDay":false}]
 		function initializeCalendar(doc){
 			var dates = doc.devicelist.device
 			$('#calendar').fullCalendar({
+				header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                selectable: true,
 				   events: dates
 				});
 		}
-		
+		var document;
 		 $.ajax({
             url: '${pageContext.request.contextPath}/calendarFetch',
             dataType: "json",
             data: {
             },
             success: function(doc) {
-        
-            	console.log("Data is"+JSON.stringify(doc));
-                initializeCalendar(doc);
+            	document = doc;
+        		if(doc == null || doc==undefined || doc.devicelist.device.length === 0){
+        			 $.ajax({
+        		            url: '${pageContext.request.contextPath}/googleFetch',
+        		            dataType: "json",
+        		            data: {
+        		            },
+        		            success: function(doc2) {
+        		            	document = doc2;
+        		            	console.log("Data is"+JSON.stringify(doc2));
+        		                initializeCalendar(doc2);
+        		            }
+        		        }); 
+        		} else {
+        			console.log("Data is"+JSON.stringify(doc));
+                    initializeCalendar(doc);        			
+        		}
             }
-        }); 
+        });  
 		
 		  var date = new Date();
 		  var d = date.getDate();
 		  var m = date.getMonth();
 		  var y = date.getFullYear();
 		  
+		  /* var doc1 = [{"id":"1","title":"New Event","start":"2015-11-01T00:01:00+05:30","end":"2015-01-14T00:01:00+05:30","allDay":false}]
+			function initializeCalendar(doc2){
+				var dates1 = doc2.devicelist.device
+				$('#calendar').fullCalendar({
+					   events: dates1
+					});
+			} */
+			
+			
+			
+			 /*  var date = new Date();
+			  var d = date.getDate();
+			  var m = date.getMonth();
+			  var y = date.getFullYear(); */
 		 		
-	});
+	 }); 
     </script>
 
 </head>
@@ -70,7 +104,7 @@
 					<span class="glyphicon  glyphicon-user" style="vertical-align:middle, horizontal-align:right" aria-hidden="true">
 					</span>
 				</button>
-				<li style="padding-left: 770px;"><a href = "j_spring_security_logout"> Logout </a></li>	
+				<li><a href = "j_spring_security_logout"> Logout </a></li>	
 			</ul>
 			</div>
 		</div>
@@ -82,7 +116,7 @@
 
 	<div class="col-md-2" style=" padding-top: 20px;">
 		<ul class="nav nav-pills nav-stacked" >
-			<li class="active"><a href="#">Schedule</a>
+			<li class="active"><a href="#">My Calendar</a>
 			<li><a href="${pageContext.request.contextPath}/calendar">Manual Schedule</a>
 			<li><a href="${pageContext.request.contextPath}/meetingTime">Get Meeting Time</a>
 			<li><a href="${pageContext.request.contextPath}/googleEvent">Event For MeetMe Users</a>

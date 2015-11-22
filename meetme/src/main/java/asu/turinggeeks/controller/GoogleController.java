@@ -219,49 +219,5 @@ public String CallSampleServlet_sub(
 	  return VIEW_INDEX;*/
 	  //googleDriveClient=new Drive.Builder(httpTransport,jsonFactory,credential).build();
 	}
-
-	@RequestMapping(value="/googleEvent", method=RequestMethod.GET)
-	public String showCalendar(@ModelAttribute("calendar") Calendar calendar, Model model){
-		return "googleCreate";
-	}
 	
-	@RequestMapping(value="/googleCreateEvent", method=RequestMethod.POST)
-	public String retrieveTime(Model model, HttpServletRequest request, @ModelAttribute("calendar") Calendar calendar){
-		/*Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String emailId= auth.getName();*/
-		String eventUuid = UUID.randomUUID().toString();
-		HttpSession session = request.getSession();
-		String emailId = (String) session.getAttribute("email");
-		System.out.println(emailId);
-		String counterString = (String) request.getParameter("counter");
-		if (!StringUtils.isEmpty(counterString)) {
-			int counter=Integer.parseInt(counterString);
-			String []startDate = new String[counter];
-			String []endDate = new String[counter];
-			for(int i=0; i < counter; i++){
-				startDate[i] = (String) request.getParameter("startDate"+i+"");
-				endDate[i] = (String) request.getParameter("endDate"+i+"");
-			}
-			/*int length = startDate.length;
-			String[] start = new String[length];
-			String[] end = new String[length];
-			for (int i = 0; i < length; i++) {
-				start[i] = startDate[i] + " " + startTime[i];
-				end[i] = endDate[i] + " " + endTime[i];
-			}*/
-			
-			boolean check = calendarService.insertForGoogleEvent(startDate, endDate, calendar, emailId, eventUuid);
-			if(check){
-				List<Calendar> userStartSlot = calendarService.getGoogleUserStartSlot(calendar);
-				List<Calendar> userEndSlot = calendarService.getGoogleUserEndSlot(calendar);
-				return "success";
-			}
-			else
-				return "error";
-		}
-		else
-			return "error";
-	}
-	
-
 }

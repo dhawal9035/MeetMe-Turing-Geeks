@@ -93,7 +93,6 @@ public boolean insertForGoogleCalendar(List<Calendar> calendar, String emailId) 
 		return calendarDao.insertforGoogleEvent(start,end,calendar,emailId,eventUuid);
 	}
 
-
 	public List<Calendar> getGoogleUserStartSlot(Calendar calendar) {
 		return calendarDao.getGoogleUserStartSlot(calendar);
 	}
@@ -112,6 +111,18 @@ public boolean insertForGoogleCalendar(List<Calendar> calendar, String emailId) 
 
 	public String getOptionalPeople(String uuid) {
 		return calendarDao.getOptionalPeople(uuid);
+	}
+
+	public String getGoogleRequiredPeople(String eventUuid) {
+		return calendarDao.getGoogleRequiredPeople(eventUuid);
+	}
+
+	public String getGoogleOptionalPeople(String eventUuid) {
+		return calendarDao.getGoogleOptionalPeople(eventUuid);
+	}
+
+	public JSONObject fetchGoogleData(String emailId) {
+		return calendarDao.fetchGoogleData(emailId);
 	}
 
 	

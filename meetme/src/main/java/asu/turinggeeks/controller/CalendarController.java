@@ -9,9 +9,13 @@ import java.util.TreeMap;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
+import org.joda.time.Minutes;
 import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -26,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
+import com.mysql.fabric.xmlrpc.base.Array;
 
 import asu.turinggeeks.model.Calendar;
 import asu.turinggeeks.service.CalendarService;
@@ -320,4 +325,216 @@ public class CalendarController {
         else        	
             return errormsg;
     }
+	
+	@RequestMapping(value = "/dataFetch")
+	public List<String> triggerGoogleAlgorithm(List<Calendar> startSlot, List<Calendar> endSlot, String[] RefSlots) {
+	final DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+	String[] startSlots = new String[startSlot.size()];
+	String[] EndSlots = new String[startSlot.size()];
+	List<String> outSlots = new ArrayList<String>();
+	for(int i = 0 ; i<startSlot.size();i++)
+	{
+		startSlots[i] = (startSlot.get(i).getStartTime());
+		EndSlots[i] = endSlot.get(i).getEndTime();
+	}
+
+	/*String RefSlots[] = {
+		"2015-11-21",
+		"2015-11-22"
+	};*/
+
+	ArrayList<DateTime> day_arr= new ArrayList<DateTime>();
+	DateTime refSlotStart = format.parseDateTime(RefSlots[0] +" 09:00:00"); 
+	DateTime refSlotEnd = format.parseDateTime(RefSlots[RefSlots.length-1] + " 18:00:00");	
+	HashMap<DateTime, List<Boolean> > mapBool = new HashMap<DateTime,List<Boolean>>();
+	HashMap<DateTime, List<DateTime> > mapDateTimeStart = new HashMap<DateTime,List<DateTime>>();
+	HashMap<DateTime, List<DateTime> > mapDateTimeEnd = new HashMap<DateTime,List<DateTime>>();
+	HashMap<DateTime, List<Boolean> > mapBooleanList= new HashMap<DateTime,List<Boolean>>();
+	String strStart = RefSlots[0] + " 00:00:00";
+	String strEnd = RefSlots[1] + " 00:00:00";
+	DateTime startDay = format.parseDateTime(strStart);
+	DateTime EndDay = format.parseDateTime(strEnd);
+	DateTime temp = startDay;
+	while(!temp.equals(EndDay.plusDays(1)))
+	{
+		day_arr.add(temp);
+		temp = temp.plusDays(1);
+	}
+	
+	System.out.print("Days are " + day_arr);
+	System.out.println("start slots are "+ startSlots.toString());
+	System.out.println("endslots are" + EndSlots.toString());
+	DateTime hgEnd = new DateTime();
+	DateTime hg = new DateTime();
+	for(DateTime day : day_arr){
+		System.out.println("day----------------------------- " + day);
+		List<DateTime> list = new ArrayList<DateTime>() ;
+		List<DateTime> listEnd = new ArrayList<DateTime>() ;
+		refSlotStart = day.plusHours(9);
+		refSlotEnd = day.plusHours(18);
+		System.out.println("refslotstart " + refSlotStart + "refslotend " + refSlotEnd);
+		for(int i = 0 ; i<startSlots.length ; i++)
+		{
+			System.out.println("startslot "+ startSlots[i]);
+			hg= format.parseDateTime(startSlots[i]);
+			hgEnd= format.parseDateTime(EndSlots[i]);
+			if((hg.getYear()==day.getYear())&&(hg.getMonthOfYear()== day.getMonthOfYear()))
+			{
+				if(hg.getDayOfMonth()==day.getDayOfMonth())
+				{	
+					if(hgEnd.isBefore(refSlotEnd) && hg.isAfter(refSlotStart)){
+						System.out.println("adding slot " + hg + "->" + hgEnd);
+						if (!list.contains(hg))
+							list.add(hg);
+						if(!list.contains(hgEnd))
+							listEnd.add(hgEnd);
+					}
+				}
+				/*else
+					list = null;*/	
+			}
+			/*else
+				list = null;*/
+			
+		}
+
+		mapDateTimeStart.put(day, list);
+		mapDateTimeEnd.put(day, listEnd);
+		System.out.println();
+	}
+	for (Map.Entry<DateTime, List<DateTime>> m: mapDateTimeStart.entrySet())
+		System.out.println(m.toString());
+	DateTime start = new DateTime();
+	DateTime end = new DateTime();
+	for(DateTime day : day_arr){
+		List<Boolean> freeBusy = new ArrayList<Boolean>() ;
+		
+		for(int i = 0 ; i<19 ; i++)
+			freeBusy.add(true);
+			mapBooleanList.put(day, freeBusy);
+		}
+	for(DateTime day : day_arr){
+		List<DateTime> startTime= mapDateTimeStart.get(day);
+		List<DateTime> EndTime= mapDateTimeEnd.get(day);
+		if (startTime.size()!=0)
+		for(int i = 0 ; i<startTime.size() ; i++)
+		{ 
+			start =  startTime.get(i);
+			end =  EndTime.get(i);
+			double slotTime = Minutes.minutesBetween(start, end).getMinutes()/30.0;
+			double slotStart = start.getHourOfDay()- 9 ;
+			if(start.getMinuteOfHour() == 30)
+				slotStart = slotStart +  0.5;
+		 	slotStart*=2;
+			for(int j = 0; j<slotTime ; j++)
+				mapBooleanList.get(day).set((int)(j+slotStart+1), false);
+		}
+		
+	}
+		List<String> output = new ArrayList<String>();
+		
+		for (DateTime day1 : day_arr){
+			refSlotStart = day1.plusHours(9);
+			List <Boolean> BoolList = mapBooleanList.get(day1);
+			hg = null;
+			DateTime outSlotStart=null,outSlotEnd=null;
+			for(int i = 1; i<BoolList.size();i++)
+			{
+				if(BoolList.get(i)==true)
+				{
+					if (hg==null)
+					{
+						hg = refSlotStart;
+						outSlotStart = hg;
+					}
+					hg = hg.plusMinutes(30);
+				}
+				else
+				{
+					outSlotEnd = hg;
+					if(!outSlotEnd.equals(outSlotStart))
+						outSlots.add(outSlotStart.toString().substring(0, 19).replace('T',  ' ') + "->"+ outSlotEnd.toString().substring(0, 19).replace('T',  ' '));
+					outSlotStart = refSlotStart.plusMinutes(i*30);
+					hg = outSlotStart;
+				}
+			}
+			if(outSlotEnd==null)
+			{
+				System.out.println("outslot start is "+ outSlotStart);
+				outSlots.add(outSlotStart.toString().substring(0, 19).replace('T',  ' ') + "->"+ outSlotStart.plusHours(9).toString().substring(0, 19).replace('T',  ' '));
+			}
+				else if(outSlotEnd.isBefore(hg))
+				outSlots.add(outSlotStart.toString().substring(0, 19).replace('T',  ' ') + "->"+ hg.toString().substring(0, 19).replace('T',  ' '));	
+			}
+			System.out.println(outSlots);
+			
+		
+		return outSlots;
+	}
+	
+	@RequestMapping(value="/googleEvent", method=RequestMethod.GET)
+	public String showGoogle(@ModelAttribute("calendar") Calendar calendar, Model model){
+		return "googleCreate";
+	}
+	
+	@RequestMapping(value="/googleCreateEvent", method=RequestMethod.POST)
+	public String retrieveTime(Model model, HttpServletRequest request, @ModelAttribute("calendar") Calendar calendar){
+		/*Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String emailId= auth.getName();*/
+		String eventUuid = UUID.randomUUID().toString();
+		HttpSession session = request.getSession();
+		String emailId = (String) session.getAttribute("email");
+		System.out.println(emailId);
+		String counterString = (String) request.getParameter("counter");
+		if (!StringUtils.isEmpty(counterString)) {
+			int counter=Integer.parseInt(counterString);
+			String []startDate = new String[counter];
+			String []endDate = new String[counter];
+			for(int i=0; i < counter; i++){
+				startDate[i] = (String) request.getParameter("startDate"+i+"");
+				endDate[i] = (String) request.getParameter("endDate"+i+"");
+			}
+			/*int length = startDate.length;
+			String[] start = new String[length];
+			String[] end = new String[length];
+			for (int i = 0; i < length; i++) {
+				start[i] = startDate[i] + " " + startTime[i];
+				end[i] = endDate[i] + " " + endTime[i];
+			}*/
+			String[] slots = new String[2];
+			slots[0]=startDate[0];
+			slots[1]=endDate[0];
+			List<String> output = new ArrayList<String>();
+			boolean check = calendarService.insertForGoogleEvent(startDate, endDate, calendar, emailId, eventUuid);
+			if(check){
+				List<Calendar> userStartSlot = calendarService.getGoogleUserStartSlot(calendar);
+				List<Calendar> userEndSlot = calendarService.getGoogleUserEndSlot(calendar);
+				System.out.println(slots);
+				output = triggerGoogleAlgorithm(userStartSlot, userEndSlot, slots);
+				String requiredPeople = calendarService.getGoogleRequiredPeople(eventUuid);
+				String optionalPeople = calendarService.getGoogleOptionalPeople(eventUuid);
+				System.out.println(optionalPeople);
+				mailService.sendPreferredTime(emailId,requiredPeople,optionalPeople, output);
+				model.addAttribute("reverseOutput",output);
+				return "preferredTime";
+			}
+			else
+				return "error";
+		}
+		else
+			return "error";
+	}
+	
+	@RequestMapping(value="googleFetch", method=RequestMethod.GET)
+	@ResponseBody
+	public String googleData(Model model,@ModelAttribute("calendar") Calendar calendar, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		String emailId = (String) session.getAttribute("email");
+		//You may have to create a JSON Object. Change the return type of the method if returning a JSON obj
+		JSONObject data = calendarService.fetchGoogleData(emailId);
+		System.out.println("Json Data:"+data);
+		model.addAttribute(data);
+		return data.toString();
+	}
+	
 }

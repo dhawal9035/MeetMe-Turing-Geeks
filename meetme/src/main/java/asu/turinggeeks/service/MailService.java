@@ -95,7 +95,7 @@ public class MailService {
 	}
 
 	public void sendPreferredTime(String emailId, String requiredPeople, String optionalPeople, List<String> reverseOutput) {
-		String all = requiredPeople+","+optionalPeople;
+		String all = emailId+","+requiredPeople+","+optionalPeople;
 		System.out.println(all);
 		
 		mimeMessage = this.mailSender.createMimeMessage();

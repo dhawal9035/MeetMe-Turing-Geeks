@@ -337,7 +337,9 @@ public class CalendarDao {
 	@SuppressWarnings("unchecked")
 	public List<Calendar> getGoogleUserStartSlot(Calendar calendar) {
 		List<Calendar> userStartSlot1 = null;
+		List<Calendar> start1 = new ArrayList<Calendar>();
 		List<Calendar> userStartSlot2 = null;
+		List<Calendar> start2 = new ArrayList<Calendar>();
 		String required = calendar.getGuestRequiredEmail();
 		String optional = calendar.getGuestOptionalEmail();
 		String[] splitRequired = required.split(",");
@@ -346,25 +348,31 @@ public class CalendarDao {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		for (int i = 0; i < splitRequired.length; i++) {
 			userStartSlot1 = jdbcTemplate.query(query, new Object[] { splitRequired[i] }, new StartSlotMapper());
+			//System.out.println("In Dao Start Slot:"+userStartSlot1.get(i).getStartTime());
+			start1.addAll(userStartSlot1);
 		}
 		for (int i = 0; i < splitRequired.length; i++) {
 			userStartSlot2 = jdbcTemplate.query(query, new Object[] { splitOptional[i] }, new StartSlotMapper());
+			//System.out.println("In Dao End Slot:"+userStartSlot2.get(i).getStartTime());
+			start2.addAll(userStartSlot2);
+		}
+		/*for (int i = 0; i < start1.size(); i++) {
+			System.out.println("Startslot1" + start1.get(i).getStartTime());
 		}
 		for (int i = 0; i < userStartSlot1.size(); i++) {
-			System.out.println("Startslot1" + userStartSlot1.get(i).getStartTime());
-		}
-		for (int i = 0; i < userStartSlot1.size(); i++) {
-			System.out.println("Startslot2" + userStartSlot2.get(i).getStartTime());
-		}
-		List<Calendar> userStartSlot = new ArrayList<Calendar>(userStartSlot1);
-		userStartSlot.addAll(userStartSlot2);
-		return userStartSlot;
+			System.out.println("Startslot2" + start2.get(i).getStartTime());
+		}*/
+		List<Calendar> start = new ArrayList<Calendar>(start1);
+		start.addAll(start2);
+		return start;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Calendar> getGoogleUserEndSlot(Calendar calendar) {
 		List<Calendar> userEndSlot1 = null;
+		List<Calendar> end1 = new ArrayList<Calendar>();
 		List<Calendar> userEndSlot2 = null;
+		List<Calendar> end2 = new ArrayList<Calendar>();
 		String required = calendar.getGuestRequiredEmail();
 		String optional = calendar.getGuestOptionalEmail();
 		String[] splitRequired = required.split(",");
@@ -373,19 +381,21 @@ public class CalendarDao {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		for (int i = 0; i < splitRequired.length; i++) {
 			userEndSlot1 = jdbcTemplate.query(query, new Object[] { splitRequired[i] }, new EndSlotMapper());
+			end1.addAll(userEndSlot1);
 		}
 		for (int i = 0; i < splitRequired.length; i++) {
 			userEndSlot2 = jdbcTemplate.query(query, new Object[] { splitOptional[i] }, new EndSlotMapper());
+			end2.addAll(userEndSlot2);
 		}
-		for (int i = 0; i < userEndSlot1.size(); i++) {
+		/*for (int i = 0; i < userEndSlot1.size(); i++) {
 			System.out.println("EndSlot1" + userEndSlot1.get(i).getEndTime());
 		}
 		for (int i = 0; i < userEndSlot2.size(); i++) {
 			System.out.println("EndSlot2" + userEndSlot2.get(i).getEndTime());
-		}
-		List<Calendar> userEndSlot = new ArrayList<Calendar>(userEndSlot1);
-		userEndSlot.addAll(userEndSlot2);
-		return userEndSlot;
+		}*/
+		List<Calendar> end = new ArrayList<Calendar>(end1);
+		end.addAll(end2);
+		return end;
 	}
 
 	public boolean insertEvent(Calendar calendar, String emailId, String uuid) {
@@ -406,4 +416,50 @@ public class CalendarDao {
 		String optional = jdbcTemplate.queryForObject(query, new Object[] { uuid }, String.class);
 		return optional;
 	}
+
+	public String getGoogleRequiredPeople(String eventUuid) {
+		query = "Select guest_required_email from google_event_info where google_event_uuid=?";
+		String required = jdbcTemplate.queryForObject(query, new Object[] { eventUuid }, String.class);
+		return required;
+	}
+
+	public String getGoogleOptionalPeople(String eventUuid) {
+		query = "Select guest_optional_email from google_event_info where google_event_uuid=?";
+		String optional = jdbcTemplate.queryForObject(query, new Object[] { eventUuid }, String.class);
+		return optional;
+	}
+
+	@SuppressWarnings("unchecked")
+	public JSONObject fetchGoogleData(String emailId) {
+		List<Calendar> calendarData = null;
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		JSONArray jArray = new JSONArray();
+		query = "select event_name_google,event_description_google,start_date_google,end_date_google from gcalendar where email_id_google=?";
+		calendarData = jdbcTemplate.query(query, new Object[] { emailId }, new CalendarRowMapper());
+		for (int i = 0; i < calendarData.size(); i++) {
+			String eventNameJson = calendarData.get(i).getEventName();
+			String eventStartTimeJson = calendarData.get(i).getStartTime();
+			String eventEndTimeJson = calendarData.get(i).getEndTime();
+			JSONObject jObj = new JSONObject();
+			jObj.put("title", eventNameJson);
+			jObj.put("start", eventStartTimeJson);
+			jObj.put("end", eventEndTimeJson);
+			jArray.add(jObj);
+		}
+		JSONObject jObjDevice = new JSONObject();
+		jObjDevice.put("device", jArray);
+		JSONObject jObjDeviceList = new JSONObject();
+		jObjDeviceList.put("devicelist", jObjDevice);
+		try {
+			FileWriter fileWriter = new FileWriter("D:\\data1.json");
+			fileWriter.write(jObjDeviceList.toJSONString());
+			fileWriter.flush();
+			fileWriter.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return jObjDeviceList;
+	}
+
 }

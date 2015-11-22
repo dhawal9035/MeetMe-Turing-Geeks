@@ -12,10 +12,10 @@ public class CalendarResultSetExtractor implements ResultSetExtractor {
 
 	public Object extractData(ResultSet rs) throws SQLException {
 		Calendar calendar = new Calendar();
-		calendar.setEventName(rs.getString("event_name"));
-		calendar.setEventDescription(rs.getString("event_description"));
-		calendar.setStartTime(rs.getString("start_time"));
-		calendar.setEndTime(rs.getString("end_time"));
+		calendar.setEventName(rs.getString(1));
+		calendar.setEventDescription(rs.getString(2));
+		calendar.setStartTime(rs.getString(3));
+		calendar.setEndTime(rs.getString(4));
 		return calendar;
 		
 	}
