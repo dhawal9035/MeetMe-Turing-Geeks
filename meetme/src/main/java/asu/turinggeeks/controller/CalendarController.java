@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
 
@@ -272,6 +273,7 @@ public class CalendarController {
 			reverseOutput =	Lists.reverse(output);
 			String requiredPeople = calendarService.getRequiredPeople(uuid);
 			String optionalPeople = calendarService.getOptionalPeople(uuid);
+			System.out.println(optionalPeople);
 			mailService.sendPreferredTime(emailId,requiredPeople,optionalPeople, reverseOutput);
 			model.addAttribute("reverseOutput",reverseOutput);
 			return "preferredTime";
@@ -287,14 +289,17 @@ public class CalendarController {
 		
 	}
 	
-	@RequestMapping(value="/calendarFetch", method=RequestMethod.GET)
+	@RequestMapping(value="calendarFetch", method=RequestMethod.GET)
+	@ResponseBody
 	public String fetchData(Model model,@ModelAttribute("calendar") Calendar calendar){
+		System.out.println("Inside calendarFetch Controller");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String emailId= auth.getName();
 		//You may have to create a JSON Object. Change the return type of the method if returning a JSON obj
 		JSONObject data = calendarService.fetchCalendarData(emailId);
+		System.out.println("Json Data:"+data);
 		model.addAttribute(data);
-		return "success";
+		return data.toString();
 	}
 	
 	@RequestMapping(value="/submitDB", method= RequestMethod.POST)

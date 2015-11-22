@@ -1,11 +1,13 @@
 package asu.turinggeeks.service;
 
+import java.io.FileWriter;
 import java.util.List;
 
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -93,18 +95,25 @@ public class MailService {
 	}
 
 	public void sendPreferredTime(String emailId, String requiredPeople, String optionalPeople, List<String> reverseOutput) {
-		String all = requiredPeople+optionalPeople;
+		String all = requiredPeople+","+optionalPeople;
+		System.out.println(all);
+		
 		mimeMessage = this.mailSender.createMimeMessage();
 		try{
+			FileWriter writer = new FileWriter("output.txt");
+			for(int i=0;i<reverseOutput.size();i++){
+				writer.write("Rank"+(i+1)+":"+reverseOutput.get(i)+"\n");
+			}
+			writer.close();
 			InternetAddress[] inviteMails = InternetAddress.parse(all);
 			mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 			mimeMessageHelper.setBcc(inviteMails);
-			mimeMessage.setSubject("Meeting Times");
+			mimeMessage.setSubject("Meeting Times!");
 			mimeMessageHelper.setFrom("meetmetg@gmail.com");
-			mimeMessageHelper.setText("<html><body>Hi,<br/><br/> Below are the meeting time as per their rank.</br>"
-					+ ""
-					+ "<a href='http://localhost:8080/meetme/viewTimings/> Click here</a>. "
+			mimeMessageHelper.setText("<html><body>Hi,<br/><br/> We have attached the meeting times as per their preference in the attached file.</br>"
 					+ "<br/><br/>Thanks and Best Regards,<br/> MeetMe Team</body></html>",true);
+			FileSystemResource file = new FileSystemResource("output.txt");
+			mimeMessageHelper.addAttachment("MeetingTime.txt", file);
 			mailSender.send(mimeMessage);
 		}
 		catch(Exception e){

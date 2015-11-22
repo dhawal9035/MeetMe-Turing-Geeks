@@ -8,7 +8,6 @@
 <head>
 	<title> Dashboard</title>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width,default-scale=1">
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script src="http://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
@@ -23,133 +22,32 @@
 	
 	<script type="text/javascript">
 	$(document).ready(function(){
+		var doc1 = [{"id":"1","title":"New Event","start":"2015-11-01T00:01:00+05:30","end":"2015-01-14T00:01:00+05:30","allDay":false}]
+		function initializeCalendar(doc){
+			var dates = doc.devicelist.device
+			$('#calendar').fullCalendar({
+				   events: dates
+				});
+		}
+		
+		 $.ajax({
+            url: '${pageContext.request.contextPath}/calendarFetch',
+            dataType: "json",
+            data: {
+            },
+            success: function(doc) {
+        
+            	console.log("Data is"+JSON.stringify(doc));
+                initializeCalendar(doc);
+            }
+        }); 
+		
 		  var date = new Date();
 		  var d = date.getDate();
 		  var m = date.getMonth();
 		  var y = date.getFullYear();
 		  
-		  $('#calendar').fullCalendar({
-			  
-			events: function(start, end, callback) {
-		        $.ajax({
-		            url: '${pageContext.request.contextPath}/calendarFetch',
-		            dataType: "json",
-		            data: {
-		                start: start.unix(),
-		                end: end.unix()
-		            },
-		            success: function(doc) {
-		                var events = [];
-		                $(doc).find('event').each(function() {
-		                    events.push({
-		                        title: $(this).attr('title'),
-		                        start: $(this).attr('start') // will be parsed
-		                    });
-		                });
-		                callback(events);
-		            }
-		        });
-		    },
-			header: {
-			  left: 'prev,next today',
-			  center: 'title',
-			  right: 'month,agendaWeek,agendaDay'
-			},
-			selectable: true,
-			selectHelper: true,
-			select: function(start, end, allDay) {
-				$('#eventModal').modal('show'); // popping my modal to create event
-				$("#modal-body").load('calendar.jsp'); //load up modal-body content
-
-			    $("#submit").bind("click", function(event){ // when you click in a create button inside dialog you should send as parameters start,end,etc
-			    	$event_name = $("#event_name").val();
-			    	$event_description = $("#event_description").val();
-			    	var moment1 = $('#calendar').fullCalendar('getDate');
-			        alert("The current date of the calendar is " + moment1.format());
-			    	/* $start_date = $("#startDate0").val();
-			    	$start_time = $("#startTime0").val();
-			    	$end_date = $("#endDate0").val();
-			    	$end_time = $("#endTime0").val();
-			    	$mailing_list = $("#mailing_list").val(); */
-
-			            if ($event_name) {
-
-			            /* 	$('#calendar').fullCalendar('renderEvent',
-			                {
-			                    //id: $id, 
-			                    title: $event_name,
-			                    /* start: $start_time,
-			                    end: $end_time,
-			                    allDay: allDay
-			                    /* url: "${pageContext.request.contextPath}/dashboard_landing" //look at this code with extra care 
-			                },true); */
-			                
-			                var myCalendar = $('#calendar'); 
-			                myCalendar.fullCalendar();
-			                var myEvent = {
-			                  title:$event_name,
-			                  allDay: true,
-			                  start: moment1.format(),
-			                  end: moment1.format()
-			                };
-			                myCalendar.fullCalendar( 'renderEvent', myEvent, true );
-
-
-			            }else{
-			            	$('#calendar').fullCalendar('unselect');
-			            }
-			        $('#eventModal').modal('toggle');// close my dialog
-
-			    });
-			},
-			editable: true,
-			events: [
-			  {
-				title: '',
-				start: new Date(y, m, 1)
-			  },
-			  {
-				title: '',
-				start: new Date(y, m, d-5),
-				end: new Date(y, m, d-2)
-			  },
-			  {
-				id: 999,
-				title: '',
-				start: new Date(y, m, d-3, 16, 0),
-				allDay: false
-			  },
-			  {
-				id: 999,
-				title: '',
-				start: new Date(y, m, d+4, 16, 0),
-				allDay: false
-			  },
-			  {
-				title: '',
-				start: new Date(y, m, d, 10, 30),
-				allDay: false
-			  },
-			  {
-				title: '',
-				start: new Date(y, m, d, 12, 0),
-				end: new Date(y, m, d, 14, 0),
-				allDay: false
-			  },
-			  {
-				title: '',
-				start: new Date(y, m, d+1, 19, 0),
-				end: new Date(y, m, d+1, 22, 30),
-				allDay: false
-			  },
-			  {
-				title: '',
-				start: new Date(y, m, 28),
-				end: new Date(y, m, 29),
-				url: 'http://google.com/'
-			  }
-			]
-		  });
+		 		
 	});
     </script>
 
@@ -188,6 +86,7 @@
 			<li><a href="${pageContext.request.contextPath}/calendar">Manual Schedule</a>
 			<li><a href="${pageContext.request.contextPath}/meetingTime">Get Meeting Time</a>
 			<li><a href="${pageContext.request.contextPath}/googleEvent">Event For MeetMe Users</a>
+			<li><a href="${pageContext.request.contextPath}/calendarFetch"> Users</a>
 		</ul>
 	</div>
 
