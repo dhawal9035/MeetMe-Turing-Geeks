@@ -76,8 +76,6 @@ public class GoogleController {
 		return "success";
  
 	}
-	
-	
 
 @RequestMapping("/redirect")
 public String CallSampleServlet_sub( 

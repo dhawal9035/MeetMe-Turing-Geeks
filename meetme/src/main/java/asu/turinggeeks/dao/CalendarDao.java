@@ -278,7 +278,7 @@ public class CalendarDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public JSONArray fetchCalendarData(String emailId) {
+	public JSONObject fetchCalendarData(String emailId) {
 		List<Calendar> calendarData = null;
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		JSONArray jArray = new JSONArray();
@@ -290,23 +290,17 @@ public class CalendarDao {
 			String eventEndTimeJson = calendarData.get(i).getEndTime();
 			JSONObject jObj = new JSONObject();
 			jObj.put("title", eventNameJson);
-			jArray.add(jObj);
 			jObj.put("start", eventStartTimeJson);
 			jObj.put("end", eventEndTimeJson);
 			jArray.add(jObj);
 		}
-		/*JSONObject jObjDevice = new JSONObject();
-		jObjDevice.put("events", jArray);*/
-		
-		
-		
-		
-		
-		/*JSONObject jObjDeviceList = new JSONObject();
-		jObjDeviceList.put("devicelist", jObjDevice);*/
+		JSONObject jObjDevice = new JSONObject();
+		jObjDevice.put("device", jArray);
+		JSONObject jObjDeviceList = new JSONObject();
+		jObjDeviceList.put("devicelist", jObjDevice);
 		try {
 			FileWriter fileWriter = new FileWriter("D:\\data.json");
-			fileWriter.write(jArray.toJSONString());
+			fileWriter.write(jObjDeviceList.toJSONString());
 			fileWriter.flush();
 			fileWriter.close();
 		} catch (Exception e) {
@@ -314,7 +308,7 @@ public class CalendarDao {
 		}
 
 		System.out.println("Zafar");
-		return jArray;
+		return jObjDeviceList;
 	}
 
 	public boolean insertforGoogleEvent(String[] start, String[] end, Calendar calendar, String emailId,
