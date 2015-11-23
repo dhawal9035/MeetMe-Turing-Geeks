@@ -14,7 +14,11 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.joda.time.Minutes;
 import org.joda.time.format.DateTimeFormat;
+<<<<<<< HEAD
 import org.joda.time.format.DateTimeFormatter;
+=======
+import org.json.simple.JSONArray;
+>>>>>>> f394ee28b392c2adb3a1ee41f4a8cd90faa8c949
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -361,19 +365,22 @@ public class CalendarController {
 			System.out.println("Majai Gai "+requiredCounter);
 			triggerAlgorithm(startSlot, endSlot,requiredSlot, optionalSlot);
 		}
-		else{
+		else{             
 			System.out.println("Na Majai "+responseCounter);
 		}
 		
 		return "meetingTime";
 	}
 	
+	
+	
+	
 	@RequestMapping(value="/calendarFetch", method=RequestMethod.GET)
 	public String fetchData(Model model,@ModelAttribute("calendarInfo") Calendar calendar){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String emailId= auth.getName();
 		//You may have to create a JSON Object. Change the return type of the method if returning a JSON obj
-		JSONObject data = calendarService.fetchCalendarData(emailId);
+		JSONArray data = calendarService.fetchCalendarData(emailId);
 		model.addAttribute(data);
 		return "success";
 	}
