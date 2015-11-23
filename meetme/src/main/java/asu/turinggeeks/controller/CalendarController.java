@@ -1,5 +1,6 @@
 package asu.turinggeeks.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.TreeMap;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.joda.time.DateTime;
@@ -30,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
-import com.mysql.fabric.xmlrpc.base.Array;
 
 import asu.turinggeeks.model.Calendar;
 import asu.turinggeeks.service.CalendarService;
@@ -66,8 +67,7 @@ public class CalendarController {
 	}
 	
 	@RequestMapping(value="/manualCalendar", method=RequestMethod.POST)
-	public String addCalendar(@ModelAttribute("calendar") Calendar calendar, Model model, HttpServletRequest request){
-		try{
+	public String addCalendar(@ModelAttribute("calendar") Calendar calendar, Model model, HttpServletRequest request) throws Exception{
 		String uuid = UUID.randomUUID().toString();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String emailId= auth.getName();
@@ -99,30 +99,19 @@ public class CalendarController {
 				return "success";
 			}
 			else
-				return "errorPage";
+				return "error";
 		}
 		else
-			return "errorPage";
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return "errorPage";
-		}
+			return "error";
 	}
 	
 	@RequestMapping(value="/submitTiming/{uuid}", method=RequestMethod.GET)
-	public String userResponse(@PathVariable String uuid, Model model){
-		try{
+	public String userResponse(@PathVariable String uuid, Model model) throws Exception{
 		int eventId = calendarService.getEventId(uuid);
 		model.addAttribute(uuid);
 		List<Calendar> probableTimings = calendarService.getAllEventDetails(eventId);
 		model.addAttribute("probableTimings", probableTimings);
 		return "eventResponse";
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return "errorPage";
-		}
 	}
 
 	@RequestMapping(value = "/algorithm", method = RequestMethod.GET)
@@ -216,8 +205,7 @@ public class CalendarController {
 
 	
 	@RequestMapping(value="userResponse", method=RequestMethod.POST)
-	public String saveResponse(Model model, HttpServletRequest request){
-		try{
+	public String saveResponse(Model model, HttpServletRequest request) throws Exception{
 		String guestMail=request.getParameter("email");
 		String[] checkedTimings = request.getParameterValues("timing");
 		String uuid = request.getParameter("uuid");
@@ -232,11 +220,6 @@ public class CalendarController {
 			return "submitTiming/"+uuid+"";
 		}
 		return "response";
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return "errorPage";
-		}
 	}
 	
 	@RequestMapping(value="meetingTime", method = RequestMethod.GET)
@@ -248,8 +231,9 @@ public class CalendarController {
 		return "meetingTime";
 	}
 	
-	@RequestMapping(value="getTime/*", method = RequestMethod.GET)
-	public String getMeetingTime(Model model, HttpServletRequest request){
+	@RequestMapping(value="/getTime*", method = RequestMethod.GET)
+	public void getMeetingTime(Model model, HttpServletRequest request,
+			HttpSession session, HttpServletResponse response) throws Exception{
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String emailId= auth.getName();
 		int eventId= Integer.parseInt(request.getParameter("eventId"));
@@ -280,15 +264,16 @@ public class CalendarController {
 			String optionalPeople = calendarService.getOptionalPeople(uuid);
 			System.out.println(optionalPeople);
 			mailService.sendPreferredTime(emailId,requiredPeople,optionalPeople, reverseOutput);
+			session.setAttribute("reverseOutput",reverseOutput);
 			model.addAttribute("reverseOutput",reverseOutput);
-			return "preferredTime";
+			response.getWriter().println("preferredTime");
 		}
 		else{
 			System.out.println("Na Majai "+responseCounter);
 			List <Calendar> allEvents = calendarService.getAllEvents(emailId);
 			model.addAttribute("allEvents",allEvents);
 			model.addAttribute("error","error");
-			return "meetingTime";
+			response.getWriter().println("no");
 		}
 		
 		
@@ -537,4 +522,9 @@ public class CalendarController {
 		return data.toString();
 	}
 	
+	@RequestMapping(value="/preferredTime", method = RequestMethod.GET)
+	public String getPreferredTime(Model model, HttpServletRequest request,
+			HttpSession session, HttpServletResponse response) throws Exception{
+		return "preferredTime";
+	}
 }

@@ -44,9 +44,15 @@ $(document).ready(function(){
 	<div class="col-md-2" style=" padding-top: 20px;">
 		<ul class="nav nav-pills nav-stacked" >
 			<li><a href="${pageContext.request.contextPath}/schedule">My Calendar</a>
-			<li><a href="${pageContext.request.contextPath}/calendar">Manual Schedule</a>
+			<c:set var="googleUSer" value="${isGoogleUSer}"></c:set>
+			<c:if test="${not googleUSer}">
+				<li><a href="${pageContext.request.contextPath}/calendar">Manual Schedule</a>			
+			</c:if>
 			<li class="active"><a href="${pageContext.request.contextPath}/meetingTime">Get Meeting Time</a>
-			<li><a href="${pageContext.request.contextPath}/googleEvent">Event For MeetMe Users</a>
+			<c:if test="${googleUSer}">
+				<li><a href="${pageContext.request.contextPath}/googleEvent">Event For MeetMe Users</a>			
+			</c:if>
+			
 		</ul>
 	</div>
 <div class="container">

@@ -1,5 +1,7 @@
 package asu.turinggeeks.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,11 +36,12 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value="/loginSuccess", method=RequestMethod.GET)
-	public String register(Model model){
+	public String register(Model model, HttpSession session){
 		Calendar calendar = new Calendar();
 		UserInfo userForm = new UserInfo();
 		model.addAttribute("userForm", userForm);
 		model.addAttribute("calendar", calendar);
+		session.setAttribute("isGoogleUSer", false);
 		return "success";
 	}
 	

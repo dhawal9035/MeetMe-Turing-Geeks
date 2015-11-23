@@ -10,10 +10,29 @@
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <title>Meeting Time</title>
 <script type="text/javascript">
-
-	if ($(this).attr('error')) {
+	
+$(document).ready(function(){	
+	$('.events').click(function (event){ 
+    	event.preventDefault(); 
+    	$.ajax({
+       	url: $(this).attr('href')
+       ,success: function(response) {
+    	   if (response !== null && response != undefined && response.trim() == 'no'){
+    		   alert('We still have not received a response from each required person. Please check back later')
+    	   }
+    	   else{
+    		   top.location.href = "${pageContext.request.contextPath}/preferredTime";
+    	   }
+       }
+    })
+    return false;
+	});
+});	
+	/* function theFunction(){
+	if ($(!this).attr('error')) {
 	    alert('Exists!');
 	}
+	} */
 	
 </script>
 </head>
@@ -46,9 +65,15 @@
 	<div class="col-md-2" style=" padding-top: 20px;">
 		<ul class="nav nav-pills nav-stacked" >
 			<li><a href="${pageContext.request.contextPath}/schedule">My Calendar</a>
-			<li><a href="${pageContext.request.contextPath}/calendar">Manual Schedule</a>
+			<c:set var="googleUSer" value="${isGoogleUSer}"></c:set>
+			<c:if test="${not googleUSer}">
+				<li><a href="${pageContext.request.contextPath}/calendar">Manual Schedule</a>			
+			</c:if>
 			<li class="active"><a href="${pageContext.request.contextPath}/meetingTime">Get Meeting Time</a>
-			<li><a href="${pageContext.request.contextPath}/googleEvent">Event For MeetMe Users</a>
+			<c:if test="${googleUSer}">
+				<li><a href="${pageContext.request.contextPath}/googleEvent">Event For MeetMe Users</a>			
+			</c:if>
+			
 		</ul>
 	</div>
 <div class="container">
@@ -64,7 +89,7 @@
 				<c:forEach var="request" items="${allEvents}">
 					<tr>
 						<td>
-							<a href="${pageContext.request.contextPath}/getTime/?eventId=${request.eventId}&uuid=${request.uuid}"><label><c:out value="${request.eventId}"></c:out></label>
+							<a class="events" href="${pageContext.request.contextPath}/getTime?eventId=${request.eventId}&uuid=${request.uuid}"><label><c:out value="${request.eventId}"></c:out></label>
 								<%-- <input type="hidden" name="time" value="${request.eventId}"> --%>
 							</a>
 						</td>

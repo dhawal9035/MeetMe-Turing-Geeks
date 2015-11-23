@@ -181,6 +181,7 @@ public String CallSampleServlet_sub(
 		System.out.println(jsonIdentity);
 		HttpSession session = request.getSession();
 		session.setAttribute("email", user.getEmail());
+		session.setAttribute("isGoogleUSer", true);
 		
 		boolean check = calendarService.insertForGoogleCalendar(cal , user.getEmail());
 		if( check == true)
