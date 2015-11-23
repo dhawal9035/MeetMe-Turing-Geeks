@@ -16,6 +16,7 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.Minutes;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -30,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
-import com.mysql.fabric.xmlrpc.base.Array;
 
 import asu.turinggeeks.model.Calendar;
 import asu.turinggeeks.service.CalendarService;
@@ -283,7 +283,7 @@ public class CalendarController {
 			model.addAttribute("reverseOutput",reverseOutput);
 			return "preferredTime";
 		}
-		else{
+		else{             
 			System.out.println("Na Majai "+responseCounter);
 			List <Calendar> allEvents = calendarService.getAllEvents(emailId);
 			model.addAttribute("allEvents",allEvents);
@@ -294,6 +294,9 @@ public class CalendarController {
 		
 	}
 	
+	
+	
+	
 	@RequestMapping(value="calendarFetch", method=RequestMethod.GET)
 	@ResponseBody
 	public String fetchData(Model model,@ModelAttribute("calendar") Calendar calendar){
@@ -301,7 +304,7 @@ public class CalendarController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String emailId= auth.getName();
 		//You may have to create a JSON Object. Change the return type of the method if returning a JSON obj
-		JSONObject data = calendarService.fetchCalendarData(emailId);
+		JSONArray data = calendarService.fetchCalendarData(emailId);
 		System.out.println("Json Data:"+data);
 		model.addAttribute(data);
 		return data.toString();

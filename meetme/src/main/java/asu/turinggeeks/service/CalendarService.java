@@ -2,6 +2,7 @@ package asu.turinggeeks.service;
 
 import java.util.List;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,7 +85,7 @@ public boolean insertForGoogleCalendar(List<Calendar> calendar, String emailId) 
 		return calendarDao.getResponseCounter(uuid);
 	}
 	
-	public JSONObject fetchCalendarData(String emailId) {
+	public JSONArray fetchCalendarData(String emailId) {
 		return calendarDao.fetchCalendarData(emailId);
 	}
 
