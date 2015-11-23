@@ -125,6 +125,138 @@ public class CalendarController {
 		}
 	}
 
+	
+	@RequestMapping(value = "/googlealgorithm")
+	public void triggerGoogleAlgorithm(List<Calendar> startSlot, List<Calendar> endSlot, List<Calendar> RefSlot, List<Calendar> optionalSlot ) {
+	final DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+	String[] startSlots = new String[startSlot.size()];
+	String[] EndSlots = new String[startSlot.size()];
+	for(int i = 0 ; i<startSlot.size();i++)
+	{
+		startSlots[i] = (startSlot.get(i).getStartTime());
+		EndSlots[i] = endSlot.get(i).getStartTime();
+	}
+
+	String RefSlots[] = {
+		"2015-11-21",
+		"2015-11-22"
+	};
+	DateTime refSlotStart = format.parseDateTime(RefSlots[0] +" 09:00:00"); 
+	DateTime refSlotEnd = format.parseDateTime(RefSlots[RefSlots.length-1] + " 18:00:00");	
+	ArrayList<DateTime> day_arr= new ArrayList<DateTime>();
+	
+	HashMap<DateTime, List<Boolean> > mapBool = new HashMap<DateTime,List<Boolean>>();
+	HashMap<DateTime, List<DateTime> > mapDateTimeStart = new HashMap<DateTime,List<DateTime>>();
+	HashMap<DateTime, List<DateTime> > mapDateTimeEnd = new HashMap<DateTime,List<DateTime>>();
+	HashMap<DateTime, List<Boolean> > mapBooleanList= new HashMap<DateTime,List<Boolean>>();
+	String strStart = RefSlots[0] + " 00:00:00";
+	day_arr.add(format.parseDateTime(strStart));
+	
+	String strEnd = RefSlots[0] + " 00:00:00";
+	DateTime startDay = format.parseDateTime(strStart);
+	strEnd = RefSlots[1] + " 00:00:00";
+	DateTime EndDay = format.parseDateTime(strEnd);
+	DateTime temp = startDay;
+	while(!temp.equals(EndDay.plusDays(1)))
+	{
+		day_arr.add(temp);
+		temp = temp.plusDays(1);
+	}
+	
+	System.out.print(day_arr);
+	System.out.println(day_arr.toString());
+	DateTime hgEnd = new DateTime();
+	DateTime hg = new DateTime();
+	for(DateTime day : day_arr){
+		System.out.println("day " + day);
+		List<DateTime> list = new ArrayList<DateTime>() ;
+		List<DateTime> listEnd = new ArrayList<DateTime>() ;
+		for(int i = 0 ; i<startSlots.length ; i++)
+		{
+			hg= format.parseDateTime(startSlots[i]);
+			hgEnd= format.parseDateTime(EndSlots[i]);
+			
+			if((hg.getYear()==day.getYear())&&(hg.getMonthOfYear()== day.getMonthOfYear()))
+			{
+				if(hg.getDayOfMonth()==day.getDayOfMonth())
+				{	
+					if(hgEnd.isBefore(refSlotEnd) && hg.isAfter(refSlotStart)){
+						list.add(hg);
+						listEnd.add(hgEnd);
+					}
+				}
+				else
+					list = null;	
+			}
+			else
+				list = null;
+			mapDateTimeStart.put(day, list);
+			mapDateTimeEnd.put(day, listEnd);
+		}
+	}
+	for (Map.Entry<DateTime, List<DateTime>> m: mapDateTimeStart.entrySet())
+		System.out.println(m.toString());
+	DateTime start = new DateTime();
+	DateTime end = new DateTime();
+	for(DateTime day : day_arr){
+		List<Boolean> freeBusy = new ArrayList<Boolean>() ;
+		
+		for(int i = 0 ; i<19 ; i++)
+			freeBusy.add(true);
+			mapBooleanList.put(day, freeBusy);
+		}
+	for(DateTime day : day_arr){
+		List<DateTime> startTime= mapDateTimeStart.get(day);
+		List<DateTime> EndTime= mapDateTimeEnd.get(day);
+		if (startTime!=null)
+		for(int i = 0 ; i<startTime.size() ; i++)
+		{ 
+			start =  startTime.get(i);
+			end =  EndTime.get(i);
+			double slotTime = Minutes.minutesBetween(start, end).getMinutes()/30.0;
+			double slotStart = start.getHourOfDay()- 9 ;
+			if(start.getMinuteOfHour() == 30)
+				slotStart = slotStart +  0.5;
+		 	slotStart*=2;
+			for(int j = 0; j<slotTime ; j++)
+				mapBooleanList.get(day).set((int)(j+slotStart+1), false);
+		}
+		List<String> output = new ArrayList<String>();
+		List<String> outSlots = new ArrayList<String>();
+		for (DateTime day1 : day_arr){
+			refSlotStart = day1.plusHours(9);
+			List <Boolean> BoolList = mapBooleanList.get(day1);
+			hg = null;
+			DateTime outSlotStart=null,outSlotEnd=null;
+			for(int i = 1; i<BoolList.size();i++)
+			{
+				if(BoolList.get(i)==true)
+				{
+					if (hg==null)
+					{
+						hg = refSlotStart;
+						outSlotStart = hg;
+					}
+					hg = hg.plusMinutes(30);
+				}
+				else
+				{
+					outSlotEnd = hg;
+					if(!outSlotEnd.equals(outSlotStart))
+						outSlots.add(outSlotStart.toString().substring(0, 19).replace('T',  ' ') + "->"+ outSlotEnd.toString().substring(0, 19).replace('T',  ' '));
+					outSlotStart = refSlotStart.plusMinutes(i*30);
+					hg = outSlotStart;
+				}
+			}
+			if(outSlotEnd==null)
+				outSlots.add(outSlotStart.toString().substring(0, 19).replace('T',  ' ') + "->"+ outSlotStart.plusHours(21).toString().substring(0, 19).replace('T',  ' '));
+			else if(outSlotEnd.isBefore(hg))
+				outSlots.add(outSlotStart.toString().substring(0, 19).replace('T',  ' ') + "->"+ hg.toString().substring(0, 19).replace('T',  ' '));	
+			}
+			System.out.println(outSlots);
+	}
+}
+
 	@RequestMapping(value = "/algorithm", method = RequestMethod.GET)
 	public List<String> triggerAlgorithm(List<Calendar> startSlot, List<Calendar> endSlot, List<Calendar> requiredSlot, List<Calendar> optionalSlot ) {
 
@@ -213,7 +345,6 @@ public class CalendarController {
 		return output;
 		
 	}
-
 	
 	@RequestMapping(value="userResponse", method=RequestMethod.POST)
 	public String saveResponse(Model model, HttpServletRequest request){
